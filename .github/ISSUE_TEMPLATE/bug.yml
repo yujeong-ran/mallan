@@ -1,0 +1,53 @@
+name: "🐞 Bug"
+description: '버그가 발생했나요? (Jira Story와 연동됩니다.)'
+labels: [bug]
+title: '버그 제목을 입력하세요'
+body:
+  - type: input
+    id: storyKey
+    attributes:
+      label: '🌳 관련 Jira 키 (Story Ticket Number)'
+      description: 'Jira의 Story Ticket Number를 입력해주세요 (예: ICT-103)'
+      placeholder: 'EX) ICT-103'
+    validations:
+      required: true
+
+  - type: input
+    id: branch
+    attributes:
+      label: '🍃 브랜치명 (Branch)'
+      description: '버그 수정을 위한 브랜치명을 작성해주세요 (예: fix/your-bug)'
+      placeholder: 'fix/your-bug'
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: '🐞 버그 설명'
+      description: 발생한 버그를 구체적으로 설명해주세요.
+    validations:
+      required: false
+
+  - type: textarea
+    id: simulation
+    attributes:
+      label: '🔍 발생 상황 재현 (시뮬레이션)'
+      description: 버그가 발생한 과정이나 조건을 단계별로 작성해주세요.
+    validations:
+      required: false
+
+  - type: textarea
+    id: etc
+    attributes:
+      label: '📌 기타'
+      description: 전달할 내용이 있다면 작성해주세요.
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        **🔗 자동 생성된 정보**
+        - Jira Story: `${{ inputs.storyKey }}`

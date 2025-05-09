@@ -1,0 +1,53 @@
+name: "🛠️ Refactor"
+description: '리팩터링이 필요한 부분이 있나요? (Jira Story와 연동됩니다.)'
+labels: [refactor]
+title: '이슈 제목을 입력하세요'
+body:
+  - type: input
+    id: storyKey
+    attributes:
+      label: '🌳 관련 Jira 키 (Story Ticket Number)'
+      description: 'Jira의 Story Ticket Number를 입력해주세요 (예: ICT-100)'
+      placeholder: 'EX) ICT-100'
+    validations:
+      required: true
+
+  - type: input
+    id: branch
+    attributes:
+      label: '🍃 브랜치명 (Branch)'
+      description: '브랜치명을 작성해주세요 (예: refactor/your-branch)'
+      placeholder: 'refactor/your-branch'
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: '🛠️ 리팩터링 설명'
+      description: 리팩터링이 필요한 이유와 대상 코드를 설명해주세요.
+    validations:
+      required: false
+
+  - type: textarea
+    id: tasks
+    attributes:
+      label: '📋 작업 항목'
+      description: 리팩터링할 작업을 구체적으로 작성해주세요.
+    validations:
+      required: false
+
+  - type: textarea
+    id: etc
+    attributes:
+      label: '📌 기타'
+      description: 전달하고 싶은 추가 정보가 있다면 적어주세요.
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        **🔗 자동 생성된 정보**
+        - Jira Story: `${{ inputs.storyKey }}`

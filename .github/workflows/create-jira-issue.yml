@@ -1,0 +1,68 @@
+name: Link Existing Jira Issue to GitHub Issue
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  create-jira-issue:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Login to Jira
+        uses: atlassian/gajira-login@v3
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+
+      - name: Extract Jira Key and Branch
+        id: extract
+        run: |
+          echo "${{ github.event.issue.body }}" > issue_body.txt
+
+          JIRA_KEY=$(grep -A 2 '🌳' issue_body.txt | tail -n 1 | grep -oE '[A-Z]+-[0-9]+' || true)
+          BRANCH_NAME=$(grep -A 2 '🍃' issue_body.txt | tail -n 1 | grep -oE '[a-zA-Z0-9/_\-]+' || true)
+
+          echo "📌 Jira Key: $JIRA_KEY"
+          echo "📌 Branch: $BRANCH_NAME"
+
+          echo "JIRA_KEY=$JIRA_KEY" >> $GITHUB_ENV
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+
+          if [ -z "$JIRA_KEY" ] || [ -z "$BRANCH_NAME" ]; then
+            echo "❌ JIRA_KEY 또는 BRANCH_NAME 추출 실패"
+            exit 1
+          fi
+
+      - name: Move Jira Issue to IN PROGRESS
+        run: |
+          curl -s -u "${{ secrets.JIRA_USER_EMAIL }}:${{ secrets.JIRA_API_TOKEN }}" \
+          -X POST -H "Content-Type: application/json" \
+          --data '{"transition": {"id": "21"}}' \
+          "${{ secrets.JIRA_BASE_URL }}/rest/api/3/issue/${{ env.JIRA_KEY }}/transitions"
+
+      - name: Checkout dev branch
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+
+      - name: Create Feature Branch from dev
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git checkout -b "${{ env.BRANCH_NAME }}"
+          git push origin "${{ env.BRANCH_NAME }}"
+
+      - name: Comment with Jira Link
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: create-comment
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            ✅ 이슈가 Jira와 연결되었습니다: [${{ env.JIRA_KEY }}](${{ secrets.JIRA_BASE_URL }}/browse/${{ env.JIRA_KEY }})
