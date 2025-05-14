@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="EntryPointsManager">
+    <list size="5">
+      <item index="0" class="java.lang.String" itemvalue="io.swagger.v3.oas.annotations.Operation" />
+      <item index="1" class="java.lang.String" itemvalue="io.swagger.v3.oas.annotations.tags.Tag" />
+      <item index="2" class="java.lang.String" itemvalue="jakarta.persistence.PrePersist" />
+      <item index="3" class="java.lang.String" itemvalue="lombok.RequiredArgsConstructor" />
+      <item index="4" class="java.lang.String" itemvalue="org.springframework.scheduling.annotation.Scheduled" />
+    </list>
+  </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="ms-21" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
