@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="EntryPointsManager">
-    <list size="5">
+    <list size="6">
       <item index="0" class="java.lang.String" itemvalue="io.swagger.v3.oas.annotations.Operation" />
       <item index="1" class="java.lang.String" itemvalue="io.swagger.v3.oas.annotations.tags.Tag" />
       <item index="2" class="java.lang.String" itemvalue="jakarta.persistence.PrePersist" />
       <item index="3" class="java.lang.String" itemvalue="lombok.RequiredArgsConstructor" />
-      <item index="4" class="java.lang.String" itemvalue="org.springframework.scheduling.annotation.Scheduled" />
+      <item index="4" class="java.lang.String" itemvalue="org.springframework.context.annotation.Configuration" />
+      <item index="5" class="java.lang.String" itemvalue="org.springframework.scheduling.annotation.Scheduled" />
     </list>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
