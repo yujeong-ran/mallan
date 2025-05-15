@@ -1,0 +1,27 @@
+#spring:
+#  datasource:
+#    url: jdbc:mysql://<RDS-ENDPOINT>:3306/mallan
+#    username: mallan_user
+#    password: your_secure_password
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#
+#  redis:
+#    host: <Redis-Host>
+#    port: 6379
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: validate
+#    properties:
+#      hibernate:
+#        format_sql: false
+#    show-sql: false
+#
+#  data:
+#    redis:
+#      repositories:
+#        enabled: false
+#
+#logging:
+#  level:
+#    root: info
