@@ -1,0 +1,9 @@
+spring:
+  config:
+    import: optional:file:.env.properties, classpath:application-local.yml
+  profiles:
+    active: local
+
+  docker:
+    compose:
+      enabled: false
