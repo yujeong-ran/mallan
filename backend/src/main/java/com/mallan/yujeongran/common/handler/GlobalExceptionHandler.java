@@ -1,7 +1,9 @@
 package com.mallan.yujeongran.common.handler;
 
+import com.mallan.yujeongran.common.exception.DuplicateJoinException;
 import com.mallan.yujeongran.common.exception.MallanCustomException;
 import com.mallan.yujeongran.common.error.ErrorCode;
+import com.mallan.yujeongran.common.model.CommonResponse;
 import com.mallan.yujeongran.common.model.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity
                 .status(ex.getErrorCode().getStatus())
                 .body(ErrorResponse.from(ex.getErrorCode()));
+    }
+
+    @ExceptionHandler(DuplicateJoinException.class)
+    public ResponseEntity<CommonResponse<Void>> handleDuplicateJoin(DuplicateJoinException ex) {
+        return ResponseEntity.badRequest().body(CommonResponse.failure(ex.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
