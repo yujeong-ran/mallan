@@ -39,6 +39,9 @@ public class LiarRoom {
     @Column(name = "player_count")
     private int playerCount;
 
+    @Column(name = "description_count")
+    private int descriptionCount;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
