@@ -1,12 +1,7 @@
-import styled from 'styled-components';
-
-const Container = styled.div`
-  height: 100vh;
-  background: linear-gradient(to bottom, #f5eaff, #fef8ff);
-`;
+import HomeList from '../components/HomeList';
 
 function Home() {
-  return <Container></Container>;
+  return <HomeList />;
 }
 
 export default Home;
