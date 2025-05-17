@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const HeaderContainer = styled.header`
+  padding-top: 70px;
+
   h1 {
     display: block;
     text-align: center;

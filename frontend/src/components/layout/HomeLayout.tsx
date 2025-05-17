@@ -1,7 +1,6 @@
-import { Outlet } from 'react-router-dom';
-import Footer from './Footer';
 import styled from 'styled-components';
-import Header from './Header';
+import Header from '../Header';
+import Footer from '../Footer';
 
 const Wrap = styled.div`
   display: flex;
@@ -18,13 +17,11 @@ const Main = styled.main`
   margin: 0 auto;
 `;
 
-function HomeLayout() {
+function HomeLayout({ children }: { children: React.ReactNode }) {
   return (
     <Wrap>
       <Header />
-      <Main>
-        <Outlet />
-      </Main>
+      <Main>{children}</Main>
       <Footer />
     </Wrap>
   );

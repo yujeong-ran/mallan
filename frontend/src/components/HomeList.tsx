@@ -5,7 +5,7 @@ import { LiaRedhat } from 'react-icons/lia';
 const ListStyle = styled.ul`
   display: flex;
   flex-wrap: wrap;
-  margin: 70px -10px 0;
+  margin: 0 -10px;
 
   li {
     width: calc(50% - 20px);

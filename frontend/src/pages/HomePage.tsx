@@ -1,7 +1,7 @@
 import HomeList from '../components/HomeList';
 
-function Home() {
+function HomePage() {
   return <HomeList />;
 }
 
-export default Home;
+export default HomePage;

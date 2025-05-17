@@ -1,7 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import GlobalStyle from './styles/globalStyle';
-import Home from './pages/Home';
-import HomeLayout from './components/Layout';
+import HomeLayout from './components/layout/HomeLayout';
+import Home from './pages/HomePage';
+import LiarGameLayout from './components/layout/LiarGameLayout';
+import LiarMainPage from './pages/liar/LiarMainPage';
 
 function App() {
   return (
@@ -9,8 +11,16 @@ function App() {
       <GlobalStyle />
       <Router>
         <Routes>
-          <Route element={<HomeLayout />}>
-            <Route path="/" element={<Home />} />
+          <Route
+            path="/"
+            element={
+              <HomeLayout>
+                <Home />
+              </HomeLayout>
+            }
+          />
+          <Route element={<LiarGameLayout />}>
+            <Route path="/liar" element={<LiarMainPage />} />
           </Route>
         </Routes>
       </Router>
