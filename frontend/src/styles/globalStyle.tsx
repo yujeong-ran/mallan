@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import './font.css';
 
 const GlobalStyle = createGlobalStyle`
 /* Reset CSS */
@@ -28,7 +29,10 @@ footer, header, hgroup, menu, nav, section {
 	display: block;
 }
 body {
+	color:#1b1718;
+	font-family: 'HakgyoNadeuri';
 	line-height: 1;
+	
 }
 ol, ul {
 	list-style: none;
@@ -44,6 +48,11 @@ q:before, q:after {
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
+}
+
+a {
+	text-decoration: none;
+	color:inherit;
 }
 `;
 
