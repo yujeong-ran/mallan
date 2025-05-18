@@ -23,17 +23,20 @@ public class LiarPlayerController {
     private final LiarRoomService liarRoomService;
 
     @PostMapping
-    @Operation(summary = "플레이어 생성 API", description = "닉네임을 입력받아 플레이어를 생성합니다.")
-    public ResponseEntity<CommonResponse<Map<String, String>>> createPlayer(@RequestBody CreatePlayerRequestDto request) {
-        String nickname = request.getNickname();
-        String playerId = liarRedisService.createPlayer(nickname);
+    @Operation(summary = "플레이어 생성 API", description = "닉네임과 아바타 이미지를 입력받아 플레이어를 생성합니다.")
+    public ResponseEntity<CommonResponse<Map<String, String>>> createPlayer(
+            @RequestBody CreatePlayerRequestDto request
+    ) {
+        String playerId = liarRedisService.createPlayer(request.getNickname(), request.getProfileImage());
 
         Map<String, String> response = new HashMap<>();
         response.put("id", playerId);
-        response.put("nickname", nickname);
+        response.put("nickname", request.getNickname());
+        response.put("profileImage", request.getProfileImage());
 
         return ResponseEntity.ok(CommonResponse.success("플레이어 생성 성공", response));
     }
+
 
     @GetMapping("/{roomCode}/can-start")
     @Operation(summary = "게임 시작 가능 여부 확인 API", description = "4명 이상 12명 이하일 때 true 반환")

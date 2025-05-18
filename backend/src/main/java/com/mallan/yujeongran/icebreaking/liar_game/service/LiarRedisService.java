@@ -21,15 +21,21 @@ public class LiarRedisService {
 
     private final RedisTemplate<String, String> redisTemplate;
 
-    public String createPlayer(String nickname) {
+    public String createPlayer(String nickname, String profileImage) {
         String playerId = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
-        redisTemplate.opsForValue().set("player:" + playerId, nickname);
-        redisTemplate.expire("player:" + playerId, Duration.ofHours(24));
+        redisTemplate.opsForValue().set("player:" + playerId + ":nickname", nickname);
+        redisTemplate.opsForValue().set("player:" + playerId + ":profileImage", profileImage);
+        redisTemplate.expire("player:" + playerId + ":nickname", Duration.ofHours(24));
+        redisTemplate.expire("player:" + playerId + ":profileImage", Duration.ofHours(24));
         return playerId;
     }
 
     public String getNickname(String playerId) {
-        return redisTemplate.opsForValue().get("player:" + playerId);
+        return redisTemplate.opsForValue().get("player:" + playerId + ":nickname");
+    }
+
+    public String getProfileImage(String playerId) {
+        return redisTemplate.opsForValue().get("player:" + playerId + ":profileImage");
     }
 
     public void createRoom(String roomCode, String hostId) {

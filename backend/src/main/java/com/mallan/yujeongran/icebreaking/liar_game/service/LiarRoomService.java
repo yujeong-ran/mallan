@@ -148,13 +148,15 @@ public class LiarRoomService {
     public Map<String, String> getVotedLiar(String roomCode) {
         String votedLiarId = liarRedisService.getVotedLiarId(roomCode);
         String nickname = liarRedisService.getNickname(votedLiarId);
+        String avatar = liarRedisService.getProfileImage(votedLiarId);
 
         Map<String, String> result = new HashMap<>();
         result.put("votedLiarId", votedLiarId);
         result.put("nickname", nickname != null ? nickname : "알 수 없음");
-
+        result.put("avatarImage", avatar != null ? avatar : "default.png");
         return result;
     }
+
 
     public String getWordForPlayer(String roomCode, String playerId) {
         LiarRoom room = liarRoomRepository.findByRoomCode(roomCode)
