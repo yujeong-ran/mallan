@@ -25,4 +25,7 @@ public class LiarPlayer {
     @Column(name = "is_liar", nullable = false)
     private Boolean isLiar;
 
+    @Column(name = "profileImage", nullable = false)
+    private String profileImage;
+
 }
