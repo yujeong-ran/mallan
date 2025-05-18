@@ -1,8 +1,12 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import media from '../styles/breakPoint';
 
 const HeaderContainer = styled.header`
   padding-top: 70px;
+  ${media.medium`
+      padding-top:50px;
+  `}
 
   h1 {
     display: block;
@@ -13,6 +17,10 @@ const HeaderContainer = styled.header`
     a {
       display: inline-block;
       font-size: 46px;
+
+      ${media.medium`
+          font-size:36px;
+      `}
 
       em {
         color: #ffd620;

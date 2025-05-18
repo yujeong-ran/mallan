@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import media from '../styles/breakPoint';
 import { Link } from 'react-router-dom';
 import { LiaRedhat } from 'react-icons/lia';
 
@@ -17,6 +18,11 @@ const ListStyle = styled.ul`
     background: #0271e0;
     transform: translateY(0);
     transition: transform 0.3s ease;
+
+    ${media.medium`
+      width: 100%;
+      min-height:170px;
+    `}
 
     &.empty {
       background: #f5f5f5;
@@ -42,6 +48,10 @@ const ListStyle = styled.ul`
       padding: 32px;
       box-sizing: border-box;
 
+      ${media.small`
+        padding: 24px;
+      `}
+
       h2 {
         display: flex;
         align-items: center;
@@ -55,7 +65,7 @@ const ListStyle = styled.ul`
       }
 
       p {
-        margin: 14px 0 30px;
+        margin: 14px 0 20px;
         font-size: 15px;
         color: #cce3f9;
         line-height: 1.5;
