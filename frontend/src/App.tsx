@@ -20,7 +20,8 @@ function App() {
             }
           />
           <Route element={<LiarGameLayout />}>
-            <Route path="/liar" element={<LiarMainPage />} />
+            <Route path="/liar/room" element={<LiarMainPage />} />
+            <Route path="/liar/room/:roomId" element={<LiarMainPage />} />
           </Route>
         </Routes>
       </Router>

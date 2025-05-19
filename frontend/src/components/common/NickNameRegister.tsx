@@ -1,0 +1,53 @@
+import styled from 'styled-components';
+
+const InputBox = styled.div`
+  position: relative;
+  width: 100%;
+  height: 40px;
+  margin-top: 40px;
+  border: 1px solid ${({ theme }) => theme.point};
+  border-radius: ${({ theme }) => theme.borderRadSm};
+  overflow: hidden;
+
+  label {
+    position: absolute;
+    z-index: 1;
+    top: 5px;
+    left: 5px;
+    width: 66px;
+    height: calc(100% - 10px);
+    line-height: 30px;
+    color: #fff;
+    text-align: center;
+    border-radius: ${({ theme }) => theme.borderRadXsm};
+    background-color: ${({ theme }) => theme.point};
+  }
+
+  input {
+    padding-left: 80px;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #fff;
+
+    &::placeholder {
+      color: #ccc;
+    }
+  }
+`;
+
+function NickNameRegister({ placeholder }: { placeholder: string }) {
+  return (
+    <InputBox>
+      <label htmlFor="nickname">닉네임</label>
+      <input
+        id="nickname"
+        type="text"
+        maxLength={10}
+        placeholder={placeholder}
+      />
+    </InputBox>
+  );
+}
+
+export default NickNameRegister;
