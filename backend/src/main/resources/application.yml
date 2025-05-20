@@ -7,3 +7,9 @@ spring:
   docker:
     compose:
       enabled: false
+
+
+springdoc:
+  swagger-ui:
+    tagsSorter: alpha
+    operationsSorter: method
