@@ -5,7 +5,7 @@ const InputBox = styled.div`
   width: 100%;
   height: 40px;
   margin-top: 40px;
-  border: 1px solid ${({ theme }) => theme.point};
+  border: 1px solid ${({ theme }) => theme.border};
   border-radius: ${({ theme }) => theme.borderRadSm};
   overflow: hidden;
 
@@ -18,15 +18,17 @@ const InputBox = styled.div`
     height: calc(100% - 10px);
     line-height: 30px;
     color: #fff;
+    font-size: 14px;
     text-align: center;
     border-radius: ${({ theme }) => theme.borderRadXsm};
     background-color: ${({ theme }) => theme.point};
   }
 
   input {
-    padding-left: 80px;
-    width: 100%;
+    width: calc(100% - 94px);
     height: 100%;
+    padding-left: 80px;
+    padding-right: 14px;
     border: 0;
     background: #fff;
 
@@ -43,7 +45,7 @@ function NickNameRegister({ placeholder }: { placeholder: string }) {
       <input
         id="nickname"
         type="text"
-        maxLength={10}
+        maxLength={20}
         placeholder={placeholder}
       />
     </InputBox>
