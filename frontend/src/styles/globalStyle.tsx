@@ -28,6 +28,11 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+
+:focus {
+    outline: 0;
+}
+
 body {
 	color:#1b1718;
 	font-family: 'HakgyoNadeuri';
@@ -49,11 +54,38 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-
 a {
 	text-decoration: none;
 	color:inherit;
 }
+button {
+	padding:0;
+	color: inherit;
+	border: none;
+	outline: inherit;
+	background: none;
+	cursor:pointer;
+	font-family: 'HakgyoNadeuri';
+}
+button,
+html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+    appearance: none;
+	-webkit-appearance: none;
+    cursor: pointer;
+    *overflow: visible;
+}
+
+input {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	margin: 0;
+	font-family: 'HakgyoNadeuri';
+	font-size:16px;
+}
+
 `;
 
 export default GlobalStyle;
