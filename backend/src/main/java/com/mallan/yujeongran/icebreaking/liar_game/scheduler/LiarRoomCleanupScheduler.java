@@ -2,7 +2,7 @@ package com.mallan.yujeongran.icebreaking.liar_game.scheduler;
 
 import com.mallan.yujeongran.icebreaking.liar_game.entity.LiarRoom;
 import com.mallan.yujeongran.icebreaking.liar_game.repository.LiarRoomRepository;
-import com.mallan.yujeongran.icebreaking.liar_game.service.LiarRedisService;
+import com.mallan.yujeongran.icebreaking.liar_game.service.LiarPlayerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import java.util.List;
 public class LiarRoomCleanupScheduler {
 
     private final LiarRoomRepository liarRoomRepository;
-    private final LiarRedisService liarRedisService;
+    private final LiarPlayerService liarPlayerService;
 
     @Scheduled(fixedRate = 3600000)
     public void deleteExpiredRooms() {
@@ -24,7 +24,7 @@ public class LiarRoomCleanupScheduler {
 
         for (LiarRoom room : expiredRooms) {
             liarRoomRepository.delete(room);
-            liarRedisService.deleteRoom(room.getRoomCode());
+            liarPlayerService.deleteRoom(room.getRoomCode());
         }
     }
 
