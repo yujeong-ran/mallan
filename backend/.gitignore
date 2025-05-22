@@ -14,7 +14,9 @@ backend/.gradle/
 .idea/compiler.xml
 .idea/libraries/
 .idea/**
+.idea/misc.xml
 ../.idea/**
+**/.idea/**
 *.iws
 *.iml
 *.ipr
