@@ -47,7 +47,6 @@ function CharacterSet({ isGuest }: { isGuest: boolean }) {
             : '방장은 바로 당신! 멋진 닉네임과 함께 방을 열어보세요.'
         }
       />
-
       <Button>{isGuest ? '게임 참가하기' : '방 만들기'}</Button>
     </Cont>
   );

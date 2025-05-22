@@ -93,7 +93,7 @@ function HomeList() {
   return (
     <ListStyle>
       <li>
-        <Link to="/">
+        <Link to="/liar/room">
           <h2>
             <LiaRedhat />
             <span>라이어 게임</span>

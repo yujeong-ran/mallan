@@ -76,7 +76,6 @@ input[type="submit"] {
     cursor: pointer;
     *overflow: visible;
 }
-
 input {
 	-webkit-appearance: none;
 	-moz-appearance: none;
@@ -84,6 +83,15 @@ input {
 	margin: 0;
 	font-family: 'HakgyoNadeuri';
 	font-size:16px;
+}
+select {
+	font-family: 'HakgyoNadeuri';
+	font-size:16px;
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	border: none;
+	background: none;
 }
 
 `;
