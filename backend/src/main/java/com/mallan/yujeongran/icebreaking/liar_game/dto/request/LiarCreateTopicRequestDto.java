@@ -4,9 +4,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 @Getter
-public class ExitLiarRoomRequestDto {
+public class LiarCreateTopicRequestDto {
 
-    @Schema(description = "playerId", example = "a1b2c3d4")
-    private String playerId;
+    @Schema(description = "name", example = "음식")
+    private String name;
 
 }

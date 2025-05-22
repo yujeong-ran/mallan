@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class LiarRedisService {
+public class LiarPlayerService {
 
     private final RedisTemplate<String, String> redisTemplate;
 
@@ -48,10 +48,6 @@ public class LiarRedisService {
 
         redisTemplate.expire(roomKey, Duration.ofHours(24));
         redisTemplate.expire(playerListKey, Duration.ofHours(24));
-    }
-
-    public boolean existsPlayer(String playerId) {
-        return redisTemplate.hasKey("player:" + playerId);
     }
 
     public void joinRoom(String roomCode, String playerId, String nickname) {

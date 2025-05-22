@@ -1,7 +1,7 @@
 package com.mallan.yujeongran.icebreaking.liar_game.service;
 
 import com.mallan.yujeongran.icebreaking.liar_game.dto.response.LiarWordResponseDto;
-import com.mallan.yujeongran.icebreaking.liar_game.dto.request.CreateLiarWordRequestDto;
+import com.mallan.yujeongran.icebreaking.liar_game.dto.request.LiarCreateWordRequestDto;
 import com.mallan.yujeongran.icebreaking.liar_game.entity.LiarTopic;
 import com.mallan.yujeongran.icebreaking.liar_game.entity.LiarWord;
 import com.mallan.yujeongran.icebreaking.liar_game.repository.LiarTopicRepository;
@@ -22,7 +22,7 @@ public class LiarWordService {
     private final LiarWordRepository liarWordRepository;
     private final LiarTopicRepository liarTopicRepository;
 
-    public LiarWordResponseDto createWord(CreateLiarWordRequestDto requestDto) {
+    public LiarWordResponseDto createWord(LiarCreateWordRequestDto requestDto) {
         LiarTopic topic = liarTopicRepository.findById(requestDto.getTopicId())
                 .orElseThrow(NotFoundTopicException::new);
 

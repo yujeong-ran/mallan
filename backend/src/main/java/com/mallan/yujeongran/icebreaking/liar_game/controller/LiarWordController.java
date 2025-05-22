@@ -1,7 +1,7 @@
 package com.mallan.yujeongran.icebreaking.liar_game.controller;
 
 import com.mallan.yujeongran.icebreaking.liar_game.dto.response.LiarWordResponseDto;
-import com.mallan.yujeongran.icebreaking.liar_game.dto.request.CreateLiarWordRequestDto;
+import com.mallan.yujeongran.icebreaking.liar_game.dto.request.LiarCreateWordRequestDto;
 import com.mallan.yujeongran.icebreaking.liar_game.service.LiarWordService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +23,7 @@ public class LiarWordController {
     @PostMapping
     @Operation(summary = "단어 등록 API", description = "주제 선정 후 단어를 추가합니다.")
     public ResponseEntity<LiarWordResponseDto> createWord(
-            @RequestBody CreateLiarWordRequestDto requestDto
+            @RequestBody LiarCreateWordRequestDto requestDto
     ) {
         return ResponseEntity.ok(liarWordService.createWord(requestDto));
     }
