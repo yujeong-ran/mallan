@@ -1,7 +1,7 @@
 package com.mallan.yujeongran.icebreaking.liar_game.service;
 
 import com.mallan.yujeongran.icebreaking.liar_game.dto.response.LiarTopicResponseDto;
-import com.mallan.yujeongran.icebreaking.liar_game.dto.request.CreateLiarTopicRequestDto;
+import com.mallan.yujeongran.icebreaking.liar_game.dto.request.LiarCreateTopicRequestDto;
 import com.mallan.yujeongran.icebreaking.liar_game.entity.LiarTopic;
 import com.mallan.yujeongran.icebreaking.liar_game.repository.LiarTopicRepository;
 import jakarta.transaction.Transactional;
@@ -18,7 +18,7 @@ public class LiarTopicService {
 
     private final LiarTopicRepository liartopicRepository;
 
-    public LiarTopicResponseDto createTopic(CreateLiarTopicRequestDto requestDto) {
+    public LiarTopicResponseDto createTopic(LiarCreateTopicRequestDto requestDto) {
         LiarTopic topic = LiarTopic.builder()
                 .name(requestDto.getName())
                 .build();

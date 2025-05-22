@@ -12,12 +12,11 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class RoomCleanupScheduler {
+public class LiarRoomCleanupScheduler {
 
     private final LiarRoomRepository liarRoomRepository;
     private final LiarRedisService liarRedisService;
 
-    // 1시간마다 24시간이 자난 방 탐색 후 삭제
     @Scheduled(fixedRate = 3600000)
     public void deleteExpiredRooms() {
         LocalDateTime now = LocalDateTime.now().minusHours(24);

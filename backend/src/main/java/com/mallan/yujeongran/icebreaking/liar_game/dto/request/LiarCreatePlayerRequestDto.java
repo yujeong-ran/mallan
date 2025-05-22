@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 @Getter
-public class CreatePlayerRequestDto {
+public class LiarCreatePlayerRequestDto {
 
     @Schema(description = "nickname", example = "Noah")
     private String nickname;

@@ -1,10 +1,10 @@
 package com.mallan.yujeongran.icebreaking.liar_game.controller;
 
 import com.mallan.yujeongran.common.model.CommonResponse;
-import com.mallan.yujeongran.icebreaking.liar_game.dto.request.CreateLiarRoomRequestDto;
-import com.mallan.yujeongran.icebreaking.liar_game.dto.request.ExitLiarRoomRequestDto;
-import com.mallan.yujeongran.icebreaking.liar_game.dto.request.JoinLiarRoomRequestDto;
-import com.mallan.yujeongran.icebreaking.liar_game.dto.request.SelectTopicRequestDto;
+import com.mallan.yujeongran.icebreaking.liar_game.dto.request.LiarCreateRoomRequestDto;
+import com.mallan.yujeongran.icebreaking.liar_game.dto.request.LiarExitRoomRequestDto;
+import com.mallan.yujeongran.icebreaking.liar_game.dto.request.LiarJoinRoomRequestDto;
+import com.mallan.yujeongran.icebreaking.liar_game.dto.request.LiarSelectTopicRequestDto;
 import com.mallan.yujeongran.icebreaking.liar_game.dto.response.LiarGameResultResponseDto;
 import com.mallan.yujeongran.icebreaking.liar_game.dto.response.LiarHostVerifyResponseDto;
 import com.mallan.yujeongran.icebreaking.liar_game.service.LiarRoomService;
@@ -28,7 +28,7 @@ public class LiarRoomController {
     @PostMapping
     @Operation(summary = "게임방 생성 API", description = "닉네임을 입력받아 방을 생성하고 URL 코드를 응답합니다.")
     public ResponseEntity<CommonResponse<Map<String, String>>> createRoom(
-            @RequestBody CreateLiarRoomRequestDto request
+            @RequestBody LiarCreateRoomRequestDto request
     ) {
         Map<String, String> result = liarRoomService.createRoom(request);
         return ResponseEntity.ok(CommonResponse.success("방 생성 성공!", result));
@@ -38,7 +38,7 @@ public class LiarRoomController {
     @Operation(summary = "방 입장 API", description = "닉네임을 입력받아 방에 입장합니다.")
     public ResponseEntity<CommonResponse<Void>> joinRoom(
             @PathVariable String roomCode,
-            @RequestBody JoinLiarRoomRequestDto request
+            @RequestBody LiarJoinRoomRequestDto request
     ) {
         liarRoomService.joinRoom(roomCode, request);
         return ResponseEntity.ok(CommonResponse.success("입장 성공!"));
@@ -48,7 +48,7 @@ public class LiarRoomController {
     @Operation(summary = "방 퇴장 API", description = "플레이어가 방에서 나갑니다.")
     public ResponseEntity<CommonResponse<Void>> leaveRoom(
             @PathVariable String roomCode,
-            @RequestBody ExitLiarRoomRequestDto request
+            @RequestBody LiarExitRoomRequestDto request
     ) {
         liarRoomService.ExitRoom(roomCode, request);
         return ResponseEntity.ok(CommonResponse.success("퇴장 성공!"));
@@ -58,7 +58,7 @@ public class LiarRoomController {
     @Operation(summary = "주제 선택 API", description = "방장이 주제를 선택하고 단어를 설정합니다.")
     public ResponseEntity<CommonResponse<Void>> selectTopic(
             @PathVariable String roomCode,
-            @RequestBody SelectTopicRequestDto request
+            @RequestBody LiarSelectTopicRequestDto request
     ) {
         liarRoomService.selectTopic(roomCode, request);
         return ResponseEntity.ok(CommonResponse.success("주제 선택 성공!"));
@@ -84,10 +84,11 @@ public class LiarRoomController {
         return ResponseEntity.ok(CommonResponse.success("참가자 수 조회 성공", count));
     }
 
-    @DeleteMapping("/{roomCode}")
-    @Operation(summary = "방 삭제 API", description = "방을 수동으로 삭제합니다.")
+    @PatchMapping("/{roomCode}/end")
+    @Operation(summary = "게임 종료 API", description = "방장이 게임 종료를 하면 방이 삭제됩니다.")
     public ResponseEntity<CommonResponse<Void>> deleteRoom(
             @PathVariable String roomCode
+            @
     ) {
         liarRoomService.deleteRoom(roomCode);
         return ResponseEntity.ok(CommonResponse.success("방 삭제 완료!"));

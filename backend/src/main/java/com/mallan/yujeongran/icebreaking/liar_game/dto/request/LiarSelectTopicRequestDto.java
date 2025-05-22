@@ -4,12 +4,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 @Getter
-public class CreateLiarRoomRequestDto {
+public class LiarSelectTopicRequestDto {
 
     @Schema(description = "hostId", example = "a1b2c3d4")
     private String hostId;
 
-    @Schema(description = "hostNickname", example = "Noah")
-    private String hostNickname;
+    @Schema(description = "topicId", example = "2")
+    private Long topicId;
 
 }
+

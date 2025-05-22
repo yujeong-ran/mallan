@@ -1,7 +1,7 @@
 package com.mallan.yujeongran.icebreaking.liar_game.controller;
 
 import com.mallan.yujeongran.common.model.CommonResponse;
-import com.mallan.yujeongran.icebreaking.liar_game.dto.request.CreatePlayerRequestDto;
+import com.mallan.yujeongran.icebreaking.liar_game.dto.request.LiarCreatePlayerRequestDto;
 import com.mallan.yujeongran.icebreaking.liar_game.service.LiarRedisService;
 import com.mallan.yujeongran.icebreaking.liar_game.service.LiarRoomService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,7 +25,7 @@ public class LiarPlayerController {
     @PostMapping
     @Operation(summary = "플레이어 생성 API", description = "닉네임과 아바타 이미지를 입력받아 플레이어를 생성합니다.")
     public ResponseEntity<CommonResponse<Map<String, String>>> createPlayer(
-            @RequestBody CreatePlayerRequestDto request
+            @RequestBody LiarCreatePlayerRequestDto request
     ) {
         String playerId = liarRedisService.createPlayer(request.getNickname(), request.getProfileImage());
 
