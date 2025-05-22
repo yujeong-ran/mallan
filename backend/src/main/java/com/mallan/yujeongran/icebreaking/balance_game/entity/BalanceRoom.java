@@ -27,7 +27,7 @@ public class BalanceRoom {
     private String hostNickname;
 
     @Column(name = "topic_id")
-    private Long topicId; // ✅ 오타 수정
+    private Long topicId;
 
     @Column(name = "question_count")
     private int questionCount;
