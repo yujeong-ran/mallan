@@ -1,16 +1,21 @@
 package com.mallan.yujeongran.icebreaking.balance_game.service;
 
-import com.mallan.yujeongran.icebreaking.balance_game.dto.request.StartBalanceGameRequestDto;
-import com.mallan.yujeongran.icebreaking.balance_game.dto.request.SubmitBalanceAnswerRequestDto;
+import com.mallan.yujeongran.icebreaking.balance_game.dto.request.BalanceCreateIngameQuestionRequestDto;
+import com.mallan.yujeongran.icebreaking.balance_game.dto.request.BalanceStartGameRequestDto;
+import com.mallan.yujeongran.icebreaking.balance_game.dto.request.BalanceSubmitAnswerRequestDto;
+import com.mallan.yujeongran.icebreaking.balance_game.dto.response.BalanceCreateIngameQuestionResponseDto;
 import com.mallan.yujeongran.icebreaking.balance_game.dto.response.BalanceFinalResultResponseDto;
+import com.mallan.yujeongran.icebreaking.balance_game.dto.response.BalanceQuestionResultResponseDto;
 import com.mallan.yujeongran.icebreaking.balance_game.entity.BalanceQuestion;
-import com.mallan.yujeongran.icebreaking.balance_game.entity.BalanceResult;
+import com.mallan.yujeongran.icebreaking.balance_game.entity.BalanceQuestionResult;
 import com.mallan.yujeongran.icebreaking.balance_game.entity.BalanceRoom;
+import com.mallan.yujeongran.icebreaking.balance_game.repository.BalanceFinalResultRepository;
 import com.mallan.yujeongran.icebreaking.balance_game.repository.BalanceQuestionRepository;
 import com.mallan.yujeongran.icebreaking.balance_game.repository.BalanceResultRepository;
 import com.mallan.yujeongran.icebreaking.balance_game.repository.BalanceRoomRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +31,12 @@ public class BalanceGameService {
     private final BalanceRoomRepository balanceRoomRepository;
     private final BalanceResultRepository balanceResultRepository;
     private final BalanceQuestionRepository balanceQuestionRepository;
+    private final BalanceFinalResultRepository balanceFinalResultRepository;
     private final BalancePlayerService balancePlayerService;
+    private final RedisTemplate<String, String> redisTemplate;
     private final StringRedisTemplate stringRedisTemplate;
 
-    public void startGame(String roomCode, StartBalanceGameRequestDto requestDto) {
+    public void startGame(String roomCode, BalanceStartGameRequestDto requestDto) {
         BalanceRoom room = balanceRoomRepository.findByRoomCode(roomCode)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 방입니다."));
 
@@ -54,7 +61,38 @@ public class BalanceGameService {
 
     }
 
-    public void submitAnswer(String roomCode, Long questionId, SubmitBalanceAnswerRequestDto request) {
+    public BalanceCreateIngameQuestionResponseDto createIngameQuestion(String roomCode, BalanceCreateIngameQuestionRequestDto request) {
+        if (!balancePlayerService.isHost(roomCode, request.getPlayerId())) {
+            throw new IllegalArgumentException("호스트만 문제를 생성할 수 있습니다.");
+        }
+
+        String listKey = "room:" + roomCode + ":questionIds";
+        String idxKey = "room:" + roomCode + ":currentQuestionIdx";
+
+        String idxStr = stringRedisTemplate.opsForValue().get(idxKey);
+        int idx = (idxStr == null) ? 0 : Integer.parseInt(idxStr);
+
+        List<String> questionIds = stringRedisTemplate.opsForList().range(listKey, 0, -1);
+        if (questionIds == null || idx >= questionIds.size()) {
+            return null;
+        }
+
+        Long questionId = Long.parseLong(questionIds.get(idx));
+        BalanceQuestion question = balanceQuestionRepository.findById(questionId)
+                .orElseThrow(() -> new IllegalArgumentException("문제가 존재하지 않습니다."));
+
+        stringRedisTemplate.opsForValue().set(idxKey, String.valueOf(idx + 1));
+
+        return BalanceCreateIngameQuestionResponseDto.builder()
+                .questionId(question.getId())
+                .content(question.getContent())
+                .choiceA(question.getChoiceA())
+                .choiceB(question.getChoiceB())
+                .build();
+    }
+
+
+    public void submitAnswer(String roomCode, Long questionId, BalanceSubmitAnswerRequestDto request) {
         String redisKey = "room:" + roomCode + ":question:" + questionId + ":result";
         String choice = request.getSelectedChoice();
 
@@ -62,20 +100,22 @@ public class BalanceGameService {
             throw new IllegalArgumentException("선택지는 A 또는 B만 가능합니다.");
         }
 
-        // 중복 제출 방지 (선택 사항)
         String submitKey = "room:" + roomCode + ":question:" + questionId + ":submitted:" + request.getPlayerId();
         Boolean alreadySubmitted = stringRedisTemplate.hasKey(submitKey);
         if (alreadySubmitted) {
             throw new IllegalArgumentException("이미 해당 질문에 응답하였습니다.");
         }
 
-        // 답변 수 저장
         stringRedisTemplate.opsForHash().increment(redisKey, choice, 1);
 
-        // 제출 여부 플래그 저장 (TTL은 질문 하나당 제한 시간만큼 걸어도 좋음)
         stringRedisTemplate.opsForValue().set(submitKey, "true", Duration.ofMinutes(10));
-    }
 
+        stringRedisTemplate.opsForValue().set(
+                "room:" + roomCode + ":question:" + questionId + ":answer:" + request.getPlayerId(),
+                choice
+        );
+
+    }
 
     public Map<String, Integer> getQuestionResult(String roomCode, Long questionId) {
         String redisKey = "room:" + roomCode + ":question:" + questionId + ":result";
@@ -110,7 +150,7 @@ public class BalanceGameService {
             int countA = Integer.parseInt(String.valueOf(resultMap.getOrDefault("A", "0")));
             int countB = Integer.parseInt(String.valueOf(resultMap.getOrDefault("B", "0")));
 
-            BalanceResult result = BalanceResult.builder()
+            BalanceQuestionResult result = BalanceQuestionResult.builder()
                     .room(room)
                     .question(question)
                     .countChoiceA(countA)
@@ -121,14 +161,14 @@ public class BalanceGameService {
         }
     }
 
-    public List<BalanceFinalResultResponseDto> getFinalResult(String roomCode) {
+    public List<BalanceQuestionResultResponseDto> getFinalResult(String roomCode) {
         BalanceRoom room = balanceRoomRepository.findByRoomCode(roomCode)
                 .orElseThrow(() -> new IllegalArgumentException("방이 존재하지 않습니다."));
 
-        List<BalanceResult> results = balanceResultRepository.findByRoom(room);
+        List<BalanceQuestionResult> results = balanceResultRepository.findByRoom(room);
 
         return results.stream()
-                .map(result -> BalanceFinalResultResponseDto.builder()
+                .map(result -> BalanceQuestionResultResponseDto.builder()
                         .questionId(result.getQuestion().getId())
                         .content(result.getQuestion().getContent())
                         .countA(result.getCountChoiceA())
@@ -137,7 +177,11 @@ public class BalanceGameService {
                 .collect(Collectors.toList());
     }
 
-    public void restartGame(String roomCode) {
+    public void restartGame(String roomCode, String playerId) {
+        if (!balancePlayerService.isHost(roomCode, playerId)) {
+            throw new IllegalArgumentException("호스트만 게임을 재시작할 수 있습니다.");
+        }
+
         BalanceRoom room = balanceRoomRepository.findByRoomCode(roomCode)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 방입니다."));
 
@@ -149,10 +193,14 @@ public class BalanceGameService {
             for (String qid : questionIds) {
                 stringRedisTemplate.delete("room:" + roomCode + ":question:" + qid + ":result");
 
-                String submitPrefix = "room:" + roomCode + ":question:" + qid + ":submitted:";
-                Set<String> submittedKeys = stringRedisTemplate.keys(submitPrefix + "*");
+                Set<String> submittedKeys = stringRedisTemplate.keys("room:" + roomCode + ":question:" + qid + ":submitted:*");
                 if (submittedKeys != null) {
                     stringRedisTemplate.delete(submittedKeys);
+                }
+
+                Set<String> answerKeys = stringRedisTemplate.keys("room:" + roomCode + ":question:" + qid + ":answer:*");
+                if (answerKeys != null) {
+                    stringRedisTemplate.delete(answerKeys);
                 }
             }
         }
@@ -160,21 +208,93 @@ public class BalanceGameService {
         stringRedisTemplate.delete(questionIdsKey);
         stringRedisTemplate.delete(currentIdxKey);
 
-        List<BalanceResult> oldResults = balanceResultRepository.findByRoom(room);
+        List<BalanceQuestionResult> oldResults = balanceResultRepository.findByRoom(room);
         balanceResultRepository.deleteAll(oldResults);
 
         room.setTopicId(null);
-        room.setQuestionCount(0);
+        room.setQuestionCount(5);
     }
 
-    public void deleteGame(String roomCode) {
+    public List<BalanceFinalResultResponseDto> calculateSimilarity(String roomCode, String targetPlayerId) {
+        List<String> playerIds = redisTemplate.opsForList().range("room:" + roomCode + ":players", 0, -1);
+        List<String> questionIds = stringRedisTemplate.opsForList().range("room:" + roomCode + ":questionIds", 0, -1);
+
+        if (playerIds == null || questionIds == null) throw new IllegalStateException("데이터 없음");
+
+        Map<Long, String> targetAnswers = new HashMap<>();
+
+        for (String qid : questionIds) {
+            String key = "room:" + roomCode + ":question:" + qid + ":submitted:" + targetPlayerId;
+            if (stringRedisTemplate.hasKey(key)) {
+                String selected = stringRedisTemplate.opsForValue().get("room:" + roomCode + ":question:" + qid + ":answer:" + targetPlayerId);
+                targetAnswers.put(Long.parseLong(qid), selected);
+            }
+        }
+
+        List<BalanceFinalResultResponseDto> result = new ArrayList<>();
+
+        for (String otherPlayerId : playerIds) {
+            if (otherPlayerId.equals(targetPlayerId)) continue;
+
+            int matchCount = 0;
+            int totalCount = questionIds.size();
+
+            for (String qid : questionIds) {
+                Long questionId = Long.parseLong(qid);
+                String answerTarget = targetAnswers.get(questionId);
+                String answerOther = stringRedisTemplate.opsForValue().get("room:" + roomCode + ":question:" + qid + ":answer:" + otherPlayerId);
+
+                if (answerTarget != null && answerTarget.equals(answerOther)) {
+                    matchCount++;
+                }
+            }
+
+            int matchRate = (int) Math.round((matchCount * 100.0) / totalCount);
+            result.add(BalanceFinalResultResponseDto.builder()
+                    .playerId(otherPlayerId)
+                    .nickname(balancePlayerService.getNickname(otherPlayerId))
+                    .profileImage(balancePlayerService.getProfileImage(otherPlayerId))
+                    .matchRate(matchRate)
+                    .build());
+        }
+
+        return result;
+    }
+
+    public void deleteGame(String roomCode, String playerId) {
+        if (!balancePlayerService.isHost(roomCode, playerId)) {
+            throw new IllegalArgumentException("호스트만 게임을 끝낼 수 있습니다.");
+        }
+
         BalanceRoom room = balanceRoomRepository.findByRoomCode(roomCode)
                 .orElseThrow(() -> new IllegalArgumentException("방이 존재하지 않습니다."));
 
-        balancePlayerService.deleteRoom(roomCode);
+        String questionIdsKey = "room:" + roomCode + ":questionIds";
+        List<String> questionIds = stringRedisTemplate.opsForList().range(questionIdsKey, 0, -1);
+        if (questionIds != null) {
+            for (String qid : questionIds) {
+                stringRedisTemplate.delete("room:" + roomCode + ":question:" + qid + ":result");
+
+                Set<String> submittedKeys = stringRedisTemplate.keys("room:" + roomCode + ":question:" + qid + ":submitted:*");
+                if (submittedKeys != null && !submittedKeys.isEmpty()) {
+                    stringRedisTemplate.delete(submittedKeys);
+                }
+
+                Set<String> answerKeys = stringRedisTemplate.keys("room:" + roomCode + ":question:" + qid + ":answer:*");
+                if (answerKeys != null && !answerKeys.isEmpty()) {
+                    stringRedisTemplate.delete(answerKeys);
+                }
+            }
+        }
+        stringRedisTemplate.delete(questionIdsKey);
+        stringRedisTemplate.delete("room:" + roomCode + ":currentQuestionIdx");
+
         balanceResultRepository.deleteAll(balanceResultRepository.findByRoom(room));
+        balanceFinalResultRepository.deleteAll(balanceFinalResultRepository.findByRoom(room));
+
+        balancePlayerService.deleteRoom(roomCode);
+
         balanceRoomRepository.delete(room);
     }
-
 
 }
