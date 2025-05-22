@@ -4,9 +4,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 @Getter
-public class CreateBalanceTopicRequestDto {
+public class BalanceStartGameRequestDto {
 
-    @Schema(description = "주제 이름", example = "여행")
-    private String topicName;
+    @Schema(description = "플레이어 아이디", example = "abc123ef")
+    private String playerId;
 
 }
