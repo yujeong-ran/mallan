@@ -6,10 +6,10 @@ import lombok.Getter;
 @Getter
 public class LiarJoinRoomRequestDto {
 
-    @Schema(description = "playerId", example = "a1b2c3d4")
-    private String playerId;
-
-    @Schema(description = "nickname", example = "noah")
+    @Schema(description = "닉네임", example = "noah")
     private String nickname;
+
+    @Schema(description = "프로필 이미지", example = "avatar_4_140x140.png")
+    private String profileImage;
 
 }
