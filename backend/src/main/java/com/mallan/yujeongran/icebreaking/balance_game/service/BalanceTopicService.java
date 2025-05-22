@@ -1,10 +1,7 @@
 package com.mallan.yujeongran.icebreaking.balance_game.service;
 
-import com.mallan.yujeongran.icebreaking.balance_game.dto.request.CreateBalanceQuestionRequestDto;
-import com.mallan.yujeongran.icebreaking.balance_game.dto.request.CreateBalanceTopicRequestDto;
-import com.mallan.yujeongran.icebreaking.balance_game.dto.response.BalanceQuestionResponseDto;
+import com.mallan.yujeongran.icebreaking.balance_game.dto.request.BalanceCreateTopicRequestDto;
 import com.mallan.yujeongran.icebreaking.balance_game.dto.response.BalanceTopicResponseDto;
-import com.mallan.yujeongran.icebreaking.balance_game.entity.BalanceQuestion;
 import com.mallan.yujeongran.icebreaking.balance_game.entity.BalanceTopic;
 import com.mallan.yujeongran.icebreaking.balance_game.repository.BalanceQuestionRepository;
 import com.mallan.yujeongran.icebreaking.balance_game.repository.BalanceTopicRepository;
@@ -22,7 +19,7 @@ public class BalanceTopicService {
     private final BalanceTopicRepository balanceTopicRepository;
     private final BalanceQuestionRepository balanceQuestionRepository;
 
-    public BalanceTopicResponseDto createTopic(CreateBalanceTopicRequestDto request) {
+    public BalanceTopicResponseDto createTopic(BalanceCreateTopicRequestDto request) {
         BalanceTopic topic = BalanceTopic.builder()
                 .topicName(request.getTopicName())
                 .build();
