@@ -36,7 +36,7 @@ const PlayerList = styled.ul`
 
   li {
     display: flex;
-    width: calc(50% - 36px);
+    width: calc(50% - 2px);
     border: 1px solid ${({ theme }) => theme.border};
     border-radius: ${({ theme }) => theme.borderRadSm};
     align-items: center;
@@ -44,6 +44,11 @@ const PlayerList = styled.ul`
     padding: 6px 16px;
     color: ${({ theme }) => theme.textBase};
     font-size: 14px;
+    box-sizing: border-box;
+
+    ${media.small`
+      width: 100%;
+    `}
 
     > div {
       width: 24px;

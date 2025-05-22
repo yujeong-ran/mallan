@@ -19,11 +19,9 @@ const SetList = styled.ul`
 const Select = styled.select`
   width: 100%;
   padding: 10px 14px;
+  font-size: 16px;
   border-radius: ${({ theme }) => theme.borderRadSm};
   border: 1px solid ${({ theme }) => theme.border};
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
   background: #fff url('/image/select_arw.svg') no-repeat center right 10px;
 `;
 

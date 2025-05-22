@@ -7,7 +7,7 @@ import PlayerListTabCon from '../../components/liar/PlayerListTabCon';
 import GameSetCon from '../../components/liar/GameSetCon';
 
 const Cont = styled.div`
-  height: 420px;
+  min-height: 420px;
   border-radius: ${({ theme }) => theme.borderRad};
   background: ${({ theme }) => theme.subBg};
   overflow: hidden;
