@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor
 @Builder
-public class BalanceResult {
+public class BalanceQuestionResult {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
