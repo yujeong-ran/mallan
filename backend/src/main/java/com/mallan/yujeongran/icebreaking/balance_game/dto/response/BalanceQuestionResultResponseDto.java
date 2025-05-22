@@ -5,11 +5,11 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class BalanceQuestionResponseDto {
+public class BalanceQuestionResultResponseDto {
 
-    private Long id;
+    private Long questionId;
     private String content;
-    private String choiceA;
-    private String choiceB;
+    private int countA;
+    private int countB;
 
 }

@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 @Getter
-public class CreateBalanceQuestionRequestDto {
+public class BalanceCreateQuestionRequestDto {
 
     @Schema(description = "주제 아이디", example = "1")
     private Long topicId;
@@ -17,5 +17,6 @@ public class CreateBalanceQuestionRequestDto {
 
     @Schema(description = "선택지 B", example = "산")
     private String choiceB;
+
 
 }

@@ -5,13 +5,9 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class BalanceFinalResultResponseDto {
+public class BalanceJoinRoomResponseDto {
 
     private String playerId;
-    private String nickname;
     private String profileImage;
-    private int matchRate;
-    private int matchCount;
-    private int totalCount;
 
 }

@@ -1,7 +1,7 @@
 package com.mallan.yujeongran.icebreaking.balance_game.controller;
 
 import com.mallan.yujeongran.common.model.CommonResponse;
-import com.mallan.yujeongran.icebreaking.balance_game.dto.request.CreateBalanceTopicRequestDto;
+import com.mallan.yujeongran.icebreaking.balance_game.dto.request.BalanceCreateTopicRequestDto;
 import com.mallan.yujeongran.icebreaking.balance_game.dto.response.BalanceTopicResponseDto;
 import com.mallan.yujeongran.icebreaking.balance_game.service.BalanceTopicService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,7 +23,7 @@ public class BalanceTopicController {
     @PostMapping
     @Operation(summary = "주제 생성 API", description = "새로운 밸런스 게임 주제를 생성합니다.")
     public ResponseEntity<CommonResponse<BalanceTopicResponseDto>> createTopic(
-            @RequestBody CreateBalanceTopicRequestDto request
+            @RequestBody BalanceCreateTopicRequestDto request
     ) {
         BalanceTopicResponseDto response = balanceTopicService.createTopic(request);
         return ResponseEntity.ok(CommonResponse.success("주제 생성 성공!", response));

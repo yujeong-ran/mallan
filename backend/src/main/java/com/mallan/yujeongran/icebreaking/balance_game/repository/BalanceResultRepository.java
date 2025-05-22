@@ -1,14 +1,14 @@
 package com.mallan.yujeongran.icebreaking.balance_game.repository;
 
-import com.mallan.yujeongran.icebreaking.balance_game.entity.BalanceResult;
+import com.mallan.yujeongran.icebreaking.balance_game.entity.BalanceQuestionResult;
 import com.mallan.yujeongran.icebreaking.balance_game.entity.BalanceRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface BalanceResultRepository extends JpaRepository<BalanceResult, Long> {
+public interface BalanceResultRepository extends JpaRepository<BalanceQuestionResult, Long> {
 
-    List<BalanceResult> findByRoom(BalanceRoom room);
+    List<BalanceQuestionResult> findByRoom(BalanceRoom room);
 
 }
 

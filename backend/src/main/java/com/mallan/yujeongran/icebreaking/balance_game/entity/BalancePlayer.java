@@ -21,19 +21,19 @@ public class BalancePlayer {
     @JoinColumn(name = "room_id", nullable = false)
     private BalanceRoom roomId;
 
-    @Column(nullable = false)
+    @Column(name = "player_id",nullable = false)
     private String playerId;
 
-    @Column(nullable = false)
+    @Column(name = "nickname", nullable = false)
     private String nickname;
 
-    @Column(nullable = false)
+    @Column(name = "profileImage", nullable = false)
     private String profileImage;
 
-    @Column(nullable = false)
+    @Column(name = "current_question_id",nullable = false)
     private int currentQuestionIndex;
 
-    @Column(nullable = false)
+    @Column(name = "is_done", nullable = false)
     private boolean isDone;
 
     @Column(name = "created_at", nullable = false)

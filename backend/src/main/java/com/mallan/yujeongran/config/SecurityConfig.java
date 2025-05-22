@@ -24,7 +24,8 @@ public class SecurityConfig {
                                 "/swagger-ui.html"
                         ).permitAll()
                         .requestMatchers(
-                                "/liar/**"
+                                "/liar/**",
+                                "/balance/**"
                         ).permitAll()
                         // 그 외에는 인증 필요
                         .anyRequest().authenticated()
