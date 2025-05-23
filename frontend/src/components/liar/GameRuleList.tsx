@@ -32,6 +32,7 @@ const RuleList = styled.ul`
 
     div p {
       font-size: 20px;
+
       ${media.medium`
         font-size:18px;
       `}

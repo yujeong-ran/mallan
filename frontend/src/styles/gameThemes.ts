@@ -5,6 +5,7 @@ export const gameThemes = {
     subBg: '#f7f7f7',
     textBase: '#1B1718',
     textMuted: '#9C9B9B',
+    textPoint: '#982B1C',
     textPlaceholder: '#e6e6e6',
     border: '#eee',
     borderRad: '10px',

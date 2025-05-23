@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import media from '../../styles/breakPoint';
 
 const GuideBox = styled.div`
   display: flex;
@@ -8,13 +9,23 @@ const GuideBox = styled.div`
   border-radius: ${({ theme }) => theme.borderRad};
   background: #f7f7f7;
 
+  ${media.medium`
+      display:block;
+    `}
+
   > span {
+    display: inline-block;
     padding: 6px 10px;
     margin-right: 20px;
+    margin-bottom: 10px;
     color: ${({ theme }) => theme.point};
     border-radius: 40px;
     border: 1px solid #d9d9d9;
     background-color: #f4f2f2;
+
+    ${media.medium`
+      font-size:14px;
+    `}
   }
 
   > p {
