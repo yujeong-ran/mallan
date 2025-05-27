@@ -26,7 +26,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/liar/**",
                                 "/balance/**",
-                                "/coin/**"
+                                "/coin/**",
+                                "/question/**"
                         ).permitAll()
                         // 그 외에는 인증 필요
                         .anyRequest().authenticated()

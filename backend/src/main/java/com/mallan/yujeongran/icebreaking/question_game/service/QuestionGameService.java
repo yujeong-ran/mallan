@@ -52,6 +52,12 @@ public class QuestionGameService {
         QuestionQuestion question = questionquestionRepository.findById(Long.parseLong(questionId))
                 .orElseThrow(() -> new IllegalArgumentException("해당 질문을 찾을 수 없습니다."));
 
+        String nextQuestionerId = redisTemplate.opsForValue().get("question:room:" + roomCode + ":nextQuestionerId");
+        if (nextQuestionerId != null) {
+            redisTemplate.opsForValue().set("question:room:" + roomCode + ":questionerId", nextQuestionerId);
+            redisTemplate.delete("question:room:" + roomCode + ":nextQuestionerId");
+        }
+
         return QuestionDrawResponseDto.builder()
                 .questionId(question.getId())
                 .questionContent(question.getContent())
