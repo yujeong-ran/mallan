@@ -95,7 +95,7 @@ public class QuestionGameController {
         return ResponseEntity.ok(CommonResponse.success("게임 재시작 완료!", null));
     }
 
-    @DeleteMapping("/{roomCode}/end")
+    @PatchMapping("/{roomCode}/end")
     @Operation(summary = "게임 종료 API", description = "게임을 완전히 종료하고 모든 관련 데이터를 삭제합니다.")
     public ResponseEntity<CommonResponse<Void>> endGame(
             @PathVariable String roomCode,
