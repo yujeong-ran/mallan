@@ -79,5 +79,15 @@ public class QuestionRoomController {
         return ResponseEntity.ok(CommonResponse.success("게임 시작 성공", null));
     }
 
+    @GetMapping("/{roomCode}/ready")
+    @Operation(summary = "대기방 정보 조회 API", description = "방의 기본 정보와 참가자 리스트를 반환합니다.")
+    public ResponseEntity<CommonResponse<QuestionWaitingRoomResponseDto>> getWaitingRoomInfo(
+            @PathVariable String roomCode
+    ) {
+        QuestionWaitingRoomResponseDto response = questionRoomService.getWaitingRoomInfo(roomCode);
+        return ResponseEntity.ok(CommonResponse.success("대기방 정보 조회 성공", response));
+    }
+
+
 }
 
