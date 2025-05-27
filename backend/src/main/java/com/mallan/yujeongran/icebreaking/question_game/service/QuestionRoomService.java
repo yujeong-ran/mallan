@@ -13,6 +13,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -164,5 +165,32 @@ public class QuestionRoomService {
         redisTemplate.opsForValue().set("question:room:" + roomCode + ":started", "true", Duration.ofHours(24));
     }
 
+    public QuestionWaitingRoomResponseDto getWaitingRoomInfo(String roomCode) {
+        QuestionRoom room = questionRoomRepository.findByRoomCode(roomCode)
+                .orElseThrow(() -> new IllegalArgumentException("해당 방이 존재하지 않습니다."));
+
+        List<String> playerIds = redisTemplate.opsForList().range("question:room:" + roomCode + ":players", 0, -1);
+        if (playerIds == null) {
+            throw new IllegalArgumentException("플레이어 정보를 불러올 수 없습니다.");
+        }
+
+        List<QuestionPlayInfoResponseDto> players = playerIds.stream()
+                .map(id -> QuestionPlayInfoResponseDto.builder()
+                        .playerId(id)
+                        .nickname(redisTemplate.opsForValue().get("question:player:" + id + ":nickname"))
+                        .profileImage(redisTemplate.opsForValue().get("question:player:" + id + ":profileImage"))
+                        .build())
+                .toList();
+
+        return QuestionWaitingRoomResponseDto.builder()
+                .roomCode(room.getRoomCode())
+                .hostId(room.getHostId())
+                .hostNickname(room.getHostNickname())
+                .url(room.getUrl())
+                .questionCount(room.getQuestionCount())
+                .playerCount(room.getPlayerCount())
+                .players(players)
+                .build();
+    }
 
 }
