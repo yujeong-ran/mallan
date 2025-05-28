@@ -33,15 +33,16 @@ const GuideBox = styled.div`
   }
 `;
 
-function StepGuide() {
+interface StepGuideProps {
+  title: string;
+  description: React.ReactNode;
+}
+
+function StepGuide({ title, description }: StepGuideProps) {
   return (
     <GuideBox>
-      <span>발언 단계</span>
-      <p>
-        모두 돌아가며 제시어에 대해 한마디씩 해주세요.
-        <br />
-        너무 티 나게 말하면 라이어가 눈치챌 수도 있어요!
-      </p>
+      <span>{title}</span>
+      <p>{description}</p>
     </GuideBox>
   );
 }

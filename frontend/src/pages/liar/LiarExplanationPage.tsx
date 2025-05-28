@@ -29,7 +29,16 @@ const InfoText = styled.div`
 function LiarExplanationPage() {
   return (
     <ContContainer>
-      <StepGuide />
+      <StepGuide
+        title="발언 단계"
+        description={
+          <>
+            모두 돌아가며 제시어에 대해 한마디씩 해주세요.
+            <br />
+            너무 티 나게 말하면 라이어가 눈치챌 수도 있어요!
+          </>
+        }
+      />
       <Explanation />
       <InfoText>
         <p>
