@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "question_player")
+@Table(name = "question_topic")
 @Builder
 public class QuestionTopic {
 
