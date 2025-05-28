@@ -6,6 +6,7 @@ import LiarGameLayout from './components/layout/LiarGameLayout';
 import LiarMainPage from './pages/liar/LiarMainPage';
 import LiarRoomPage from './pages/liar/LiarRoomPage';
 import LiarExplanationPage from './pages/liar/LiarExplanationPage';
+import LiarVote from './pages/liar/LiarVote';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/liar/room/:roomId" element={<LiarMainPage />} />
             <Route path="/liar/lobby" element={<LiarRoomPage />} />
             <Route path="/liar/explanation" element={<LiarExplanationPage />} />
+            <Route path="/liar/vote" element={<LiarVote />} />
           </Route>
         </Routes>
       </Router>
