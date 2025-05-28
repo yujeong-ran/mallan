@@ -4,7 +4,7 @@ import media from '../../styles/breakPoint';
 const VoteCon = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 30px;
+  padding: 40px;
   border-radius: ${({ theme }) => theme.borderRad};
   min-height: 350px;
   background: #f7f7f7;
@@ -18,6 +18,7 @@ const VoteListStyle = styled.ul`
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
+  margin-bottom: 20px;
 
   li {
     display: flex;
