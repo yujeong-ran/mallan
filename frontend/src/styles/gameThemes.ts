@@ -6,7 +6,7 @@ export const gameThemes = {
     textBase: '#1B1718',
     textMuted: '#9C9B9B',
     textPoint: '#982B1C',
-    textPlaceholder: '#e6e6e6',
+    textPlaceholder: '#B4ABAA',
     border: '#eee',
     borderRad: '10px',
     borderRadSm: '6px',
