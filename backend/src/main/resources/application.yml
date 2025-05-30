@@ -1,8 +1,8 @@
 spring:
   config:
-    import: optional:file:.env.properties, classpath:application-local.yml
+    import: optional:file:.env.properties, classpath:application-${spring.profiles.active}.yml
   profiles:
-    active: local
+    active: ${SPRING_PROFILES_ACTIVE:local}
 
   docker:
     compose:

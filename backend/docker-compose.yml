@@ -1,24 +1,31 @@
 version: "3.8"
 
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: deploy
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: mallan
+      MYSQL_USER_NAME: root
+      MYSQL_ROOT_PASSWORD: mallanmallan
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
   mysql:
     image: mysql:8.0
-    container_name: mallan-mysql
-    restart: always
-    ports:
-      - "${MYSQL_PORT}:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-    volumes:
-      - mysql_data:/var/lib/mysql
+      MYSQL_DATABASE: mallan
+      MYSQL_ROOT_PASSWORD: mallanmallan
+    ports:
+      - "3306:3306"
 
   redis:
     image: redis:7.2
-    container_name: mallan-redis
-    restart: always
     ports:
-      - "${REDIS_PORT}:6379"
-
-volumes:
-  mysql_data:
+      - "6379:6379"

@@ -1,0 +1,10 @@
+.git
+.gradle
+.idea
+build/
+node_modules/
+Dockerfile
+docker-compose.yml
+.env
+.env.*
+README.md
