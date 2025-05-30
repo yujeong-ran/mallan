@@ -1,14 +1,23 @@
-# Based on Java 21 Image
+# Base image
 FROM eclipse-temurin:21-jdk-alpine
 
-# Create a working directory
+# Set working directory
 WORKDIR /app
 
-# Copy jar file
-COPY build/libs/backend-0.0.1-SNAPSHOT.jar app.jar
+# Copy source code
+COPY . .
 
-# Port Open
+# Grant permission to gradlew
+RUN chmod +x ./gradlew
+
+# Build the project
+RUN ./gradlew clean build -x test
+
+# Copy built jar
+COPY build/libs/*.jar app.jar
+
+# Expose port
 EXPOSE 8080
 
-# Execute Commands
+# Run app
 ENTRYPOINT ["java", "-jar", "app.jar"]
