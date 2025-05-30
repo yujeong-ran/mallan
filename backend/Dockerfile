@@ -13,11 +13,8 @@ RUN chmod +x ./gradlew
 # Build the project
 RUN ./gradlew clean build -x test
 
-# Copy built jar
-COPY build/libs/*.jar app.jar
-
 # Expose port
 EXPOSE 8080
 
 # Run app
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "build/libs/backend-0.0.1-SNAPSHOT.jar"]
