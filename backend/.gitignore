@@ -52,3 +52,4 @@ bin/
 ### environment ###
 .env
 .env.properties
+.env.*
