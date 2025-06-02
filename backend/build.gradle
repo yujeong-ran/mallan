@@ -70,6 +70,10 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+tasks.named('processResources') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 processResources {
     from('src/main/resources') {
         include '**/*.yml'
