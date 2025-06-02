@@ -33,7 +33,10 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     // MySQL
-    runtimeOnly 'com.mysql:mysql-connector-j'
+    // runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // PostgreSQL
+    runtimeOnly 'org.postgresql:postgresql'
 
     // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
