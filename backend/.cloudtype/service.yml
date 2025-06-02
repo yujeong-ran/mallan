@@ -1,0 +1,26 @@
+name: mallan
+app: mallan
+component: backend
+build:
+  builder: DOCKERFILE
+  dockerfile: Dockerfile
+  context: .
+run:
+  port: 8080
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: deploy
+    - name: REDIS_HOST
+      value: redis
+    - name: POSTGRES_HOST
+      value: postgres
+    - name: REDIS_PORT
+      value: 6379
+    - name: POSTGRES_PORT
+      value: 5432
+    - name: POSTGRES_USER
+      value: mallanuser
+    - name: POSTGRES_PASSWORD
+      value: mallanpass
+    - name: POSTGRES_DB
+      value: mallan
