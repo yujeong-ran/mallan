@@ -43,8 +43,10 @@ jobs:
                   value: "6379"
               args: []
               ports: "8080"
+              dockerfile: ./backend/Dockerfile
             context:
               git:
                 url: https://github.com/${{ github.repository }}.git
                 ref: ${{ github.ref }}
+                path: backend 
 
