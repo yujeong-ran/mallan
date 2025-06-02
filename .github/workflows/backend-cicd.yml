@@ -36,5 +36,5 @@ jobs:
         with:
           token: ${{ secrets.CLOUDTYPE_TOKEN }}
           project: yujeongran/mallan
-          service: mallan
-          path: ./backend
+          stage: dev
+          yaml: ./backend/.cloudtype/service.yaml
