@@ -8,6 +8,7 @@ import LiarRoomPage from './pages/liar/LiarRoomPage';
 import LiarExplanationPage from './pages/liar/LiarExplanationPage';
 import LiarVote from './pages/liar/LiarVote';
 import LiarWordEnter from './pages/liar/LiarWordEnter';
+import LiarVictory from './pages/liar/LiarVictory';
 
 function App() {
   return (
@@ -30,7 +31,9 @@ function App() {
             <Route path="/liar/explanation" element={<LiarExplanationPage />} />
             <Route path="/liar/vote" element={<LiarVote />} />
             <Route path="/liar/wordEnter" element={<LiarWordEnter />} />
+            <Route path="/liar/victory/:winner" element={<LiarVictory />} />
           </Route>
+          s
         </Routes>
       </Router>
     </>
