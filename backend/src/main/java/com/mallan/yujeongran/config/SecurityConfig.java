@@ -31,7 +31,9 @@ public class SecurityConfig {
                         ).permitAll()
                         // 그 외에는 인증 필요
                         .anyRequest().authenticated()
+
                 )
+                .cors(Customizer.withDefaults())
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults());
 
