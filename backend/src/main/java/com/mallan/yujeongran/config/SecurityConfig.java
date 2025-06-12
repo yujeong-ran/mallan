@@ -46,7 +46,6 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
 
                 )
-                .cors(Customizer.withDefaults())
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults());
 
