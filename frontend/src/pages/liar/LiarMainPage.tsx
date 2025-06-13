@@ -4,8 +4,8 @@ import CharacterSet from '../../components/common/CharacterSet';
 import GameRuleList from '../../components/liar/GameRuleList';
 
 function LiarMainPage() {
-  const { roomId } = useParams();
-  const isGuest = !!roomId;
+  const { roomCode } = useParams();
+  const isGuest = !!roomCode;
 
   return (
     <>

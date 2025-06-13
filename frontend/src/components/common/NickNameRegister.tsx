@@ -38,7 +38,15 @@ const InputBox = styled.div`
   }
 `;
 
-function NickNameRegister({ placeholder }: { placeholder: string }) {
+function NickNameRegister({
+  placeholder,
+  nickname,
+  setNickname,
+}: {
+  placeholder: string;
+  nickname: string;
+  setNickname: (value: string) => void;
+}) {
   return (
     <InputBox>
       <label htmlFor="nickname">닉네임</label>
@@ -46,6 +54,8 @@ function NickNameRegister({ placeholder }: { placeholder: string }) {
         id="nickname"
         type="text"
         maxLength={20}
+        value={nickname}
+        onChange={(e) => setNickname(e.target.value)}
         placeholder={placeholder}
       />
     </InputBox>
