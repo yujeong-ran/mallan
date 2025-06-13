@@ -1,10 +1,25 @@
-import styled from 'styled-components';
+import styled, { __PRIVATE__ } from 'styled-components';
 import media from '../../styles/breakPoint';
 import { BiCopy } from 'react-icons/bi';
 import { TiStarFullOutline } from 'react-icons/ti';
 import { useParams } from 'react-router-dom';
 import { api } from '../../utils/api';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
+interface Player {
+  playerId: string;
+  nickname: string;
+  profileImage: string;
+}
+
+interface RoomData {
+  roomCode: string;
+  players: Player[];
+}
+
+interface RoomInfo {
+  data: RoomData;
+}
 
 const ContWrap = styled.div`
   display: flex;
@@ -60,6 +75,11 @@ const PlayerList = styled.ul`
       margin-right: 10px;
       border: 1px solid ${({ theme }) => theme.border};
       border-radius: 100%;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+      }
     }
 
     svg {
@@ -91,6 +111,7 @@ async function getRoomInfo(roomCode: string) {
 
 function PlayerListTabCon() {
   const { roomCode } = useParams();
+  const [roomInfo, setRoomInfo] = useState<RoomInfo | null>(null);
 
   useEffect(() => {
     if (!roomCode) return alert('방 코드가 없습니다.');
@@ -99,6 +120,8 @@ function PlayerListTabCon() {
       try {
         const data = await getRoomInfo(roomCode);
         console.log(data);
+
+        setRoomInfo(data);
       } catch (error) {
         console.error('방 정보 불러오기 실패', error);
       }
@@ -107,30 +130,31 @@ function PlayerListTabCon() {
     roomInfo();
   }, [roomCode]);
 
+  if (!roomInfo) {
+    return <>방 정보를 가져오는 중 오류가 발생했습니다.</>;
+  }
+
   return (
     <ContWrap>
       <RoomCode>
         <p>방 코드 :</p>
         <CodeCopy>
-          {roomCode}
+          {roomInfo?.data?.roomCode}
           <BiCopy />
         </CodeCopy>
       </RoomCode>
       <PlayerList>
-        <li>
-          <div></div>
-          <TiStarFullOutline />
-          닉네임 1
-        </li>
-        <li>
-          <div></div>닉네임 2
-        </li>
-        <li>
-          <div></div>닉네임 3
-        </li>
-        <li>
-          <div></div>닉네임 4
-        </li>
+        {roomInfo?.data?.players.map((player, i) => {
+          return (
+            <li key={player.playerId}>
+              <div>
+                <img src={player.profileImage} alt="" />
+              </div>
+              {i === 0 && <TiStarFullOutline />}
+              {player.nickname}
+            </li>
+          );
+        })}
       </PlayerList>
       <Button>게임 시작하기</Button>
     </ContWrap>
