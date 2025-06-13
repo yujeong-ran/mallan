@@ -4,8 +4,9 @@ import styled from 'styled-components';
 import media from '../../styles/breakPoint';
 import CharacterRegister from './CharacterRegister';
 import NickNameRegister from './NickNameRegister';
+import { createPlayerApi } from '../../api/createPlayerApi';
+import { roomJoinApi } from '../../api/roomJoinApi';
 import avatar1 from '../../assets/image/avatar1.png';
-import { api } from '../../utils/api';
 
 const ContTitile = styled.h2`
   margin-bottom: 20px;
@@ -37,40 +38,6 @@ const Button = styled.button`
   background: ${({ theme }) => theme.point};
 `;
 
-async function createPlayer(nickname: string, profileImage: string) {
-  try {
-    const res = await api.post('/liar/room', {
-      nickname,
-      profileImage,
-    });
-
-    console.log('성공', res.data);
-    return res.data;
-  } catch (error) {
-    console.error('생성 실패', error);
-    throw error;
-  }
-}
-
-async function roomJoin(
-  nickname: string,
-  profileImage: string,
-  roomCode: string,
-) {
-  try {
-    const res = await api.post(`/liar/room/${roomCode}/join`, {
-      nickname,
-      profileImage,
-    });
-
-    console.log('성공', res.data);
-    return res.data;
-  } catch (error) {
-    console.error('생성 실패', error);
-    throw error;
-  }
-}
-
 function CharacterSet({ isGuest }: { isGuest: boolean }) {
   const navigate = useNavigate();
   const { roomCode } = useParams();
@@ -87,10 +54,10 @@ function CharacterSet({ isGuest }: { isGuest: boolean }) {
 
       if (isGuest) {
         if (!roomCode) return alert('방 코드가 없습니다.');
-        playData = await roomJoin(nickname, profileImg, roomCode);
+        playData = await roomJoinApi(nickname, profileImg, roomCode);
         navigate(`/liar/lobby/${roomCode}`);
       } else {
-        playData = await createPlayer(nickname, profileImg);
+        playData = await createPlayerApi(nickname, profileImg);
         navigate(`/liar/lobby/${playData.data.roomCode}`);
       }
       console.log(playData);
