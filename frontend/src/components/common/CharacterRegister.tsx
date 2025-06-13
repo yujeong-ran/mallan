@@ -35,6 +35,7 @@ const SelectImg = styled.div`
     border-radius: 100%;
     background-color: #fff;
     overflow: hidden;
+    cursor: pointer;
 
     img {
       width: 100%;
@@ -43,25 +44,24 @@ const SelectImg = styled.div`
   }
 `;
 
-function CharacterRegister() {
+function CharacterRegister({
+  profileImg,
+  setProfileImg,
+}: {
+  profileImg: string;
+  setProfileImg: (img: string) => void;
+}) {
   return (
     <CharacterRegisterWrap>
       <PreviewImg>
-        <img src={avatar1} alt="" />
+        <img src={profileImg} alt="" />
       </PreviewImg>
       <SelectImg>
-        <div>
-          <img src={avatar1} alt="" />
-        </div>
-        <div>
-          <img src={avatar2} alt="" />
-        </div>
-        <div>
-          <img src={avatar3} alt="" />
-        </div>
-        <div>
-          <img src={avatar4} alt="" />
-        </div>
+        {[avatar1, avatar2, avatar3, avatar4].map((avatar, i) => (
+          <div key={i} onClick={() => setProfileImg(avatar)}>
+            <img src={avatar} alt="" />
+          </div>
+        ))}
       </SelectImg>
     </CharacterRegisterWrap>
   );

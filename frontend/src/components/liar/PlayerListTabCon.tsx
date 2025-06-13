@@ -2,6 +2,9 @@ import styled from 'styled-components';
 import media from '../../styles/breakPoint';
 import { BiCopy } from 'react-icons/bi';
 import { TiStarFullOutline } from 'react-icons/ti';
+import { useParams } from 'react-router-dom';
+import { api } from '../../utils/api';
+import { useEffect } from 'react';
 
 const ContWrap = styled.div`
   display: flex;
@@ -75,13 +78,41 @@ const Button = styled.button`
   background: ${({ theme }) => theme.point};
 `;
 
+async function getRoomInfo(roomCode: string) {
+  try {
+    const res = await api.get(`/liar/room/${roomCode}/ready`);
+    console.log('성공', res.data);
+    return res.data;
+  } catch (error) {
+    console.error('생성 실패', error);
+    throw error;
+  }
+}
+
 function PlayerListTabCon() {
+  const { roomCode } = useParams();
+
+  useEffect(() => {
+    if (!roomCode) return alert('방 코드가 없습니다.');
+
+    const roomInfo = async () => {
+      try {
+        const data = await getRoomInfo(roomCode);
+        console.log(data);
+      } catch (error) {
+        console.error('방 정보 불러오기 실패', error);
+      }
+    };
+
+    roomInfo();
+  }, [roomCode]);
+
   return (
     <ContWrap>
       <RoomCode>
         <p>방 코드 :</p>
         <CodeCopy>
-          a1b2c3d4
+          {roomCode}
           <BiCopy />
         </CodeCopy>
       </RoomCode>
