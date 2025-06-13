@@ -1,10 +1,10 @@
+import { useEffect, useState } from 'react';
 import styled, { __PRIVATE__ } from 'styled-components';
 import media from '../../styles/breakPoint';
 import { BiCopy } from 'react-icons/bi';
 import { TiStarFullOutline } from 'react-icons/ti';
 import { useParams } from 'react-router-dom';
-import { api } from '../../utils/api';
-import { useEffect, useState } from 'react';
+import { getRoomInfoApi } from '../../api/getRoomInfoApi';
 
 interface Player {
   playerId: string;
@@ -98,17 +98,6 @@ const Button = styled.button`
   background: ${({ theme }) => theme.point};
 `;
 
-async function getRoomInfo(roomCode: string) {
-  try {
-    const res = await api.get(`/liar/room/${roomCode}/ready`);
-    console.log('성공', res.data);
-    return res.data;
-  } catch (error) {
-    console.error('생성 실패', error);
-    throw error;
-  }
-}
-
 function PlayerListTabCon() {
   const { roomCode } = useParams();
   const [roomInfo, setRoomInfo] = useState<RoomInfo | null>(null);
@@ -118,7 +107,7 @@ function PlayerListTabCon() {
 
     const roomInfo = async () => {
       try {
-        const data = await getRoomInfo(roomCode);
+        const data = await getRoomInfoApi(roomCode);
         console.log(data);
 
         setRoomInfo(data);
