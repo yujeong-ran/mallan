@@ -1,4 +1,11 @@
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { getTopicApi } from '../../api/getTopicApi';
+
+interface TopicType {
+  id: number;
+  name: string;
+}
 
 const ContWrap = styled.div`
   display: flex;
@@ -26,16 +33,47 @@ const Select = styled.select`
 `;
 
 function GameSetCon() {
+  const [topics, setTopics] = useState<TopicType[]>([]);
+  const [selectedTopic, setSelectedTopic] = useState<number | null>(null);
+
+  useEffect(() => {
+    const topics = async () => {
+      const res = await getTopicApi();
+      //console.log(res);
+
+      setTopics(res);
+    };
+    topics();
+  }, []);
+
+  const handleChnage = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedTopic(Number(e.target.value));
+  };
+
+  // 확인용
+  // useEffect(() => {
+  //   console.log(selectedTopic);
+  // }, [selectedTopic]);
+
   return (
     <ContWrap>
       <SetList>
         <li>
-          <label htmlFor="category">카테고리 선택</label>
-          <Select name="" id="category">
+          <label htmlFor="category">주제 선택</label>
+          <Select
+            name=""
+            id="category"
+            onChange={handleChnage}
+            value={selectedTopic ?? ''}
+          >
             <option value="">주제 선택</option>
-            <option value="">주제 1</option>
-            <option value="">주제 2</option>
-            <option value="">주제 3</option>
+            {topics.map((topic) => {
+              return (
+                <option key={topic.id} value={topic.id}>
+                  {topic.name}
+                </option>
+              );
+            })}
           </Select>
         </li>
         <li>
