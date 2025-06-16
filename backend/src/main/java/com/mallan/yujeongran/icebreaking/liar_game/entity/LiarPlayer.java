@@ -3,6 +3,8 @@ package com.mallan.yujeongran.icebreaking.liar_game.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "liar_player")
 @Data
@@ -27,5 +29,13 @@ public class LiarPlayer {
 
     @Column(name = "profileImage", nullable = false)
     private String profileImage;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void OnCreated(){
+        this.createdAt = LocalDateTime.now();
+    }
 
 }
