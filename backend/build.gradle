@@ -18,22 +18,24 @@ repositories {
 }
 
 dependencies {
-    // Spring Boot Setting
+    // Spring Web
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Spring Web Services (SOAP 지원용)
     implementation 'org.springframework.boot:spring-boot-starter-web-services'
 
-    // Jpa
+    // Spring Data Jpa
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-    // Security
+    // Security Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // Spring Mustache
+    implementation 'org.springframework.boot:spring-boot-starter-mustache'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-
-    // MySQL
-    // runtimeOnly 'com.mysql:mysql-connector-j'
 
     // PostgreSQL
     runtimeOnly 'org.postgresql:postgresql'
@@ -55,14 +57,14 @@ dependencies {
     // Bean Validation Provider
     implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
     implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
-
-    // Jakarta Validation
-    implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
-    implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
     implementation 'org.glassfish:jakarta.el:4.0.2'
 
     // dotenv-java
     implementation 'io.github.cdimascio:dotenv-java:2.2.0'
+
+    // BCrypt Password Encoder
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
 
 }
 
