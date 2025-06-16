@@ -1,7 +1,23 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { getTopicApi } from '../../api/getTopicApi';
+import { selectRoomTopicApi } from '../../api/selectRoomTopicApi';
+import { getRoomInfoApi } from '../../api/getRoomInfoApi';
 
+interface Player {
+  playerId: string;
+  nickname: string;
+  profileImage: string;
+}
+
+interface RoomData {
+  roomCode: string;
+  players: Player[];
+}
+interface RoomInfo {
+  data: RoomData;
+}
 interface TopicType {
   id: number;
   name: string;
@@ -33,7 +49,9 @@ const Select = styled.select`
 `;
 
 function GameSetCon() {
+  const { roomCode } = useParams();
   const [topics, setTopics] = useState<TopicType[]>([]);
+  const [roomInfo, setRoomInfo] = useState<RoomInfo | null>(null);
   const [selectedTopic, setSelectedTopic] = useState<number | null>(null);
 
   useEffect(() => {
@@ -46,14 +64,41 @@ function GameSetCon() {
     topics();
   }, []);
 
+  useEffect(() => {
+    if (!roomCode) return alert('방 코드가 없습니다.');
+
+    const roomInfo = async () => {
+      try {
+        const data = await getRoomInfoApi(roomCode);
+        console.log(data);
+
+        setRoomInfo(data);
+      } catch (error) {
+        console.error('방 정보 불러오기 실패', error);
+      }
+    };
+
+    roomInfo();
+  }, [roomCode]);
+
   const handleChnage = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedTopic(Number(e.target.value));
   };
 
-  // 확인용
-  // useEffect(() => {
-  //   console.log(selectedTopic);
-  // }, [selectedTopic]);
+  useEffect(() => {
+    if (
+      selectedTopic == null ||
+      !roomCode ||
+      !roomInfo?.data?.players[0]?.playerId
+    )
+      return;
+
+    selectRoomTopicApi(
+      roomCode,
+      roomInfo?.data?.players[0].playerId,
+      selectedTopic,
+    );
+  }, [selectedTopic]);
 
   return (
     <ContWrap>
