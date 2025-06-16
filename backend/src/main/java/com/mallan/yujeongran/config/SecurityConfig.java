@@ -40,7 +40,8 @@ public class SecurityConfig {
                                 "/liar/**",
                                 "/balance/**",
                                 "/coin/**",
-                                "/question/**"
+                                "/question/**",
+                                "/reviews/**"
                         ).permitAll()
                         // 그 외에는 인증 필요
                         .anyRequest().authenticated()
