@@ -43,35 +43,18 @@ const TabCon = styled.div`
   ${media.medium`
     padding: 34px 24px;
   `}
+
+  > div {
+    &.hidden {
+      display: none;
+    }
+  }
 `;
+
+const tabBtns = ['참여자 리스트', '방 설정'];
 
 function LiarRoomPage() {
   const [activeIndex, setActiveIndex] = useState(0);
-
-  const tabContArr = [
-    {
-      tabTitle: (
-        <li
-          className={activeIndex === 0 ? 'active' : ''}
-          onClick={() => tabClickHandler(0)}
-        >
-          <button>참여자 리스트</button>
-        </li>
-      ),
-      tabCont: <PlayerListTabCon />,
-    },
-    {
-      tabTitle: (
-        <li
-          className={activeIndex === 1 ? 'active' : ''}
-          onClick={() => tabClickHandler(1)}
-        >
-          <button>방 설정</button>
-        </li>
-      ),
-      tabCont: <GameSetCon />,
-    },
-  ];
 
   const tabClickHandler = (index: number) => {
     setActiveIndex(index);
@@ -82,11 +65,26 @@ function LiarRoomPage() {
       <ContContainer>
         <Cont>
           <TabList>
-            {tabContArr.map((el) => {
-              return el.tabTitle;
+            {tabBtns.map((btn, i) => {
+              return (
+                <li
+                  key={i}
+                  className={activeIndex === i ? 'active' : ''}
+                  onClick={() => tabClickHandler(i)}
+                >
+                  <button type="button">{btn}</button>
+                </li>
+              );
             })}
           </TabList>
-          <TabCon>{tabContArr[activeIndex].tabCont}</TabCon>
+          <TabCon>
+            <div className={activeIndex === 0 ? 'block' : 'hidden'}>
+              <PlayerListTabCon />
+            </div>
+            <div className={activeIndex === 1 ? 'block' : 'hidden'}>
+              <GameSetCon />
+            </div>
+          </TabCon>
         </Cont>
       </ContContainer>
       <GameRuleList />
