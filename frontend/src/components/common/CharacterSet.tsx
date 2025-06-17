@@ -63,7 +63,11 @@ function CharacterSet({ isGuest }: { isGuest: boolean }) {
         navigate(`/liar/lobby/${roomCode}`);
       } else {
         playData = await createPlayerApi(nickname, profileImg);
+        const playerId = playData.data.playerId;
 
+        if (playerId) {
+          localStorage.setItem('playerId', playerId);
+        }
         navigate(`/liar/lobby/${playData.data.roomCode}`);
       }
       console.log(playData);

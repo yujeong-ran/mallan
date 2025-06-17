@@ -50,7 +50,6 @@ const Select = styled.select`
 `;
 
 function GameSetCon() {
-  const playerId = localStorage.getItem('playerId');
   const { roomCode } = useParams();
   const [topics, setTopics] = useState<TopicType[]>([]);
   const [roomInfo, setRoomInfo] = useState<RoomInfo | null>(null);
@@ -84,8 +83,11 @@ function GameSetCon() {
     roomInfo();
   }, [roomCode]);
 
+  const isHost =
+    roomInfo?.data?.players[0].playerId === localStorage.getItem('playerId');
+  console.log(isHost);
   const handleChnage = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (playerId) {
+    if (!isHost) {
       alert('해당 설정은 방장 권한이 필요합니다.');
       return;
     }
@@ -109,7 +111,7 @@ function GameSetCon() {
 
   // 라운드 설정
   const handleRoundChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (playerId) {
+    if (!isHost) {
       alert('해당 설정은 방장 권한이 필요합니다.');
       return;
     }
