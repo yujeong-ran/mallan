@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class LiarHostVerifyResponseDto {
 
-    private String playerId;
+    private String hostId;
 
 }

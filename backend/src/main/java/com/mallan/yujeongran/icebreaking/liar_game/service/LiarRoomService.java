@@ -89,7 +89,6 @@ public class LiarRoomService {
         return response;
     }
 
-
     public LiarWaitingRoomResponseDto getWaitingRoomInfo(String roomCode) {
         LiarRoom room = liarRoomRepository.findByRoomCode(roomCode)
                 .orElseThrow(() -> new IllegalArgumentException("해당 방이 존재하지 않습니다."));
@@ -106,7 +105,7 @@ public class LiarRoomService {
 
         return LiarWaitingRoomResponseDto.builder()
                 .roomCode(room.getRoomCode())
-                .playerId(room.getHostNickname())
+                .hostId(room.getHostId())
                 .playerCount(room.getPlayerCount())
                 .descriptionCount(room.getDescriptionCount())
                 .players(players)
@@ -129,7 +128,7 @@ public class LiarRoomService {
     }
 
     public void deleteRoom(String roomCode, LiarEndGameRequestDto request) {
-        String playerId = request.getPlayerId();
+        String playerId = request.getHostId();
         if (!liarPlayerService.isHost(roomCode, playerId)) {
             throw new IllegalArgumentException("방장만 방을 삭제할 수 있습니다.");
         }

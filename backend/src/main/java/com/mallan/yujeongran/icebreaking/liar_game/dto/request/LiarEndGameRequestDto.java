@@ -7,6 +7,6 @@ import lombok.Getter;
 public class LiarEndGameRequestDto {
 
     @Schema(description = "플레이어 아이디", example = "n514ndl1")
-    private String playerId;
+    private String hostId;
 
 }

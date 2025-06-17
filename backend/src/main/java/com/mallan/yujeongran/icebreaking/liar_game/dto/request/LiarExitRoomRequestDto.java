@@ -9,4 +9,7 @@ public class LiarExitRoomRequestDto {
     @Schema(description = "playerId", example = "a1b2c3d4")
     private String playerId;
 
+    public void setPlayerId(String playerId) {
+        this.playerId = playerId;
+    }
 }

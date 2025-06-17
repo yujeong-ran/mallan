@@ -7,6 +7,6 @@ import lombok.Getter;
 public class LiarCanStartRequestDto {
 
     @Schema(description = "플레이어 아이디", example = "m4l18at6")
-    private String playerId;
+    private String hostId;
 
 }

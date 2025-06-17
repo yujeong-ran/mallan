@@ -65,6 +65,8 @@ dependencies {
     // BCrypt Password Encoder
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    // WebSocket & Stomp
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
 }
 

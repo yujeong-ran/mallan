@@ -78,7 +78,7 @@ public class LiarRoomController {
             @PathVariable String roomCode,
             @RequestBody LiarUpdateRoundRequestDto request
     ) {
-        liarRoomService.updateDescriptionCount(roomCode, request.getRound(), request.getPlayerId());
+        liarRoomService.updateDescriptionCount(roomCode, request.getRound(), request.getHostId());
         return ResponseEntity.ok(CommonResponse.success("설명 라운드 수 변경 완료!"));
     }
 
@@ -137,7 +137,7 @@ public class LiarRoomController {
             @PathVariable String roomCode,
             @RequestBody LiarHostVerifyResponseDto request
     ) {
-        liarRoomService.startGame(roomCode, request.getPlayerId());
+        liarRoomService.startGame(roomCode, request.getHostId());
         return ResponseEntity.ok(CommonResponse.success("게임 시작 완료!"));
     }
 
@@ -147,7 +147,7 @@ public class LiarRoomController {
             @PathVariable String roomCode,
             @RequestBody LiarHostVerifyResponseDto request
     ) {
-        liarRoomService.restartGame(roomCode, request.getPlayerId());
+        liarRoomService.restartGame(roomCode, request.getHostId());
         return ResponseEntity.ok(CommonResponse.success("게임 재시작 완료!"));
     }
 

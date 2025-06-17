@@ -28,7 +28,7 @@ public class LiarPlayerController {
             @PathVariable String roomCode,
             @RequestBody LiarHostVerifyRequestDto request
     ) {
-        if (!liarPlayerService.isHost(roomCode, request.getPlayerId())) {
+        if (!liarPlayerService.isHost(roomCode, request.getHostId())) {
             throw new IllegalArgumentException("방장만 게임 시작 여부를 확인할 수 있습니다.");
         }
         boolean canStart = liarRoomService.canStartGame(roomCode);
