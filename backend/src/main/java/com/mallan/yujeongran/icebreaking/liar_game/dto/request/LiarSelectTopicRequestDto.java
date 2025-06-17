@@ -6,11 +6,16 @@ import lombok.Getter;
 @Getter
 public class LiarSelectTopicRequestDto {
 
-    @Schema(description = "hostId", example = "a1b2c3d4")
+    @Schema(description = "호스트 아이디", example = "a1b2c3d4")
     private String hostId;
 
-    @Schema(description = "topicId", example = "2")
+    @Schema(description = "주제 아이디", example = "2")
     private Long topicId;
+
+    public LiarSelectTopicRequestDto(String hostId, Long topicId){
+        this.hostId = hostId;
+        this.topicId = topicId;
+    }
 
 }
 

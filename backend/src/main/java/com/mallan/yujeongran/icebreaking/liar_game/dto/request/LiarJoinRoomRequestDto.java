@@ -12,4 +12,9 @@ public class LiarJoinRoomRequestDto {
     @Schema(description = "프로필 이미지", example = "avatar_4_140x140.png")
     private String profileImage;
 
+    public LiarJoinRoomRequestDto(String nickname, String profileImage) {
+        this.nickname = nickname;
+        this.profileImage = profileImage;
+    }
+
 }
