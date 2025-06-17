@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { getTopicApi } from '../../api/getTopicApi';
 import { selectRoomTopicApi } from '../../api/selectRoomTopicApi';
 import { getRoomInfoApi } from '../../api/getRoomInfoApi';
+import { selectRoomRoundApi } from '../../api/selectRoomRoundApi';
 
 interface Player {
   playerId: string;
@@ -53,6 +54,7 @@ function GameSetCon() {
   const [topics, setTopics] = useState<TopicType[]>([]);
   const [roomInfo, setRoomInfo] = useState<RoomInfo | null>(null);
   const [selectedTopic, setSelectedTopic] = useState<number | null>(null);
+  const [selectedRound, setSelectedRound] = useState<number | null>(null);
 
   useEffect(() => {
     const topics = async () => {
@@ -70,7 +72,7 @@ function GameSetCon() {
     const roomInfo = async () => {
       try {
         const data = await getRoomInfoApi(roomCode);
-        console.log(data);
+        //console.log(data);
 
         setRoomInfo(data);
       } catch (error) {
@@ -100,6 +102,29 @@ function GameSetCon() {
     );
   }, [selectedTopic]);
 
+  // 라운드 설정
+  const handleRoundChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    let value = Number(e.target.value);
+
+    if (value == selectedRound) return; //값이 같으면 무시
+    setSelectedRound(value);
+  };
+
+  useEffect(() => {
+    if (
+      selectedRound == null ||
+      !roomCode ||
+      !roomInfo?.data?.players[0]?.playerId
+    )
+      return;
+
+    selectRoomRoundApi(
+      roomCode,
+      roomInfo?.data?.players[0].playerId,
+      selectedRound,
+    );
+  }, [selectedRound]);
+
   return (
     <ContWrap>
       <SetList>
@@ -123,10 +148,15 @@ function GameSetCon() {
         </li>
         <li>
           <label htmlFor="round">설명 라운드</label>
-          <Select name="" id="round">
-            <option value="">2</option>
-            <option value="">3</option>
-            <option value="">4</option>
+          <Select
+            name=""
+            id="round"
+            onChange={handleRoundChange}
+            value={selectedRound ?? ''}
+          >
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
           </Select>
         </li>
       </SetList>
