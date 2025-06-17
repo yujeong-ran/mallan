@@ -7,6 +7,6 @@ import lombok.Getter;
 public class LiarHostVerifyRequestDto {
 
     @Schema(description = "플레이어 아이디", example = "a1b2c4d4")
-    private String playerId;
+    private String hostId;
 
 }

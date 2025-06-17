@@ -10,7 +10,7 @@ import java.util.List;
 public class LiarWaitingRoomResponseDto {
 
     private String roomCode;
-    private String playerId;
+    private String hostId;
     private int playerCount;
     private int descriptionCount;
     private List<LiarPlayerInfoResponseDto> players;
