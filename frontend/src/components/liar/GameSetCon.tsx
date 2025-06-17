@@ -50,6 +50,7 @@ const Select = styled.select`
 `;
 
 function GameSetCon() {
+  const playerId = localStorage.getItem('playerId');
   const { roomCode } = useParams();
   const [topics, setTopics] = useState<TopicType[]>([]);
   const [roomInfo, setRoomInfo] = useState<RoomInfo | null>(null);
@@ -84,6 +85,10 @@ function GameSetCon() {
   }, [roomCode]);
 
   const handleChnage = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (playerId) {
+      alert('해당 설정은 방장 권한이 필요합니다.');
+      return;
+    }
     setSelectedTopic(Number(e.target.value));
   };
 
@@ -104,9 +109,13 @@ function GameSetCon() {
 
   // 라운드 설정
   const handleRoundChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (playerId) {
+      alert('해당 설정은 방장 권한이 필요합니다.');
+      return;
+    }
     let value = Number(e.target.value);
 
-    if (value == selectedRound) return; //값이 같으면 무시
+    if (value == selectedRound) return;
     setSelectedRound(value);
   };
 

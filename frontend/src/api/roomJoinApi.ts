@@ -12,6 +12,7 @@ export const roomJoinApi = async (
     });
 
     console.log(res.data);
+
     return res.data;
   } catch (error) {
     console.error('생성 실패', error);

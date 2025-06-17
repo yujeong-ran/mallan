@@ -41,7 +41,6 @@ const Button = styled.button`
 function CharacterSet({ isGuest }: { isGuest: boolean }) {
   const navigate = useNavigate();
   const { roomCode } = useParams();
-  console.log(roomCode);
 
   const [nickname, setNickname] = useState('');
   const [profileImg, setProfileImg] = useState(avatar1);
@@ -55,9 +54,16 @@ function CharacterSet({ isGuest }: { isGuest: boolean }) {
       if (isGuest) {
         if (!roomCode) return alert('방 코드가 없습니다.');
         playData = await roomJoinApi(nickname, profileImg, roomCode);
+
+        const playerId = playData.data.playerId;
+
+        if (playerId) {
+          localStorage.setItem('playerId', playerId);
+        }
         navigate(`/liar/lobby/${roomCode}`);
       } else {
         playData = await createPlayerApi(nickname, profileImg);
+
         navigate(`/liar/lobby/${playData.data.roomCode}`);
       }
       console.log(playData);
