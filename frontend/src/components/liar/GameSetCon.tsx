@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import media from '../../styles/breakPoint';
 import { getTopicApi } from '../../api/getTopicApi';
 import { selectRoomTopicApi } from '../../api/selectRoomTopicApi';
 import { getRoomInfoApi } from '../../api/getRoomInfoApi';
@@ -47,6 +48,10 @@ const Select = styled.select`
   border-radius: ${({ theme }) => theme.borderRadSm};
   border: 1px solid ${({ theme }) => theme.border};
   background: #fff url('/image/select_arw.svg') no-repeat center right 10px;
+
+  ${media.small`
+    background-size:18px;
+  `}
 `;
 
 function GameSetCon() {

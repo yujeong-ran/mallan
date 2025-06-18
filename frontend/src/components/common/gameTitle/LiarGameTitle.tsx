@@ -31,6 +31,12 @@ const ExitBtn = styled.button`
   font-size: 22px;
   font-family: 'JejuDoldam';
   transform: translateY(-50%);
+
+  ${media.small`
+    top:0;
+    transform:inherit;
+    font-size:12px;
+  `}
 `;
 
 function LiarGameTitle({ title }: { title: string }) {
