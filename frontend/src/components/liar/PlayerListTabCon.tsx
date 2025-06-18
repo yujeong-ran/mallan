@@ -3,8 +3,9 @@ import styled, { __PRIVATE__ } from 'styled-components';
 import media from '../../styles/breakPoint';
 import { BiCopy } from 'react-icons/bi';
 import { TiStarFullOutline } from 'react-icons/ti';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getRoomInfoApi } from '../../api/getRoomInfoApi';
+import { gameStartApi } from '../../api/gameStartApi';
 
 interface Player {
   playerId: string;
@@ -104,7 +105,9 @@ const Button = styled.button`
 
 function PlayerListTabCon() {
   const { roomCode } = useParams();
+  const navigate = useNavigate();
   const [roomInfo, setRoomInfo] = useState<RoomInfo | null>(null);
+  const playerId = localStorage.getItem('playerId');
 
   useEffect(() => {
     if (!roomCode) return alert('방 코드가 없습니다.');
@@ -122,6 +125,18 @@ function PlayerListTabCon() {
 
     roomInfo();
   }, [roomCode]);
+
+  const isHost = roomInfo?.data?.players[0].playerId === playerId;
+
+  const handleGameStart = () => {
+    if (!isHost) {
+      alert('방장이 시작할 때까지 기다려 주세요.');
+      return;
+    } else {
+      gameStartApi(roomCode ?? '', playerId ?? '');
+      navigate(`/liar/explanation/${roomCode}`);
+    }
+  };
 
   if (!roomInfo) {
     return <>방 정보를 가져오는 중 오류가 발생했습니다.</>;
@@ -149,7 +164,7 @@ function PlayerListTabCon() {
           );
         })}
       </PlayerList>
-      <Button>게임 시작하기</Button>
+      <Button onClick={handleGameStart}>게임 시작하기</Button>
     </ContWrap>
   );
 }
