@@ -44,6 +44,10 @@ const CodeCopy = styled.button`
     margin-left: 4px;
     vertical-align: middle;
   }
+
+  ${media.small`
+    font-size:14px;
+  `}
 `;
 
 const PlayerList = styled.ul`

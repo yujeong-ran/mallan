@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import media from '../../styles/breakPoint';
 import { getTopicApi } from '../../api/getTopicApi';
 import { selectRoomTopicApi } from '../../api/selectRoomTopicApi';
 import { getRoomInfoApi } from '../../api/getRoomInfoApi';
@@ -47,10 +48,13 @@ const Select = styled.select`
   border-radius: ${({ theme }) => theme.borderRadSm};
   border: 1px solid ${({ theme }) => theme.border};
   background: #fff url('/image/select_arw.svg') no-repeat center right 10px;
+
+  ${media.small`
+    background-size:18px;
+  `}
 `;
 
 function GameSetCon() {
-  const playerId = localStorage.getItem('playerId');
   const { roomCode } = useParams();
   const [topics, setTopics] = useState<TopicType[]>([]);
   const [roomInfo, setRoomInfo] = useState<RoomInfo | null>(null);
@@ -84,8 +88,11 @@ function GameSetCon() {
     roomInfo();
   }, [roomCode]);
 
+  const isHost =
+    roomInfo?.data?.players[0].playerId === localStorage.getItem('playerId');
+  console.log(isHost);
   const handleChnage = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (playerId) {
+    if (!isHost) {
       alert('해당 설정은 방장 권한이 필요합니다.');
       return;
     }
@@ -109,7 +116,7 @@ function GameSetCon() {
 
   // 라운드 설정
   const handleRoundChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (playerId) {
+    if (!isHost) {
       alert('해당 설정은 방장 권한이 필요합니다.');
       return;
     }
