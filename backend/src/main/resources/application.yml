@@ -13,3 +13,8 @@ springdoc:
   swagger-ui:
     tagsSorter: alpha
     operationsSorter: method
+
+server:
+  servlet:
+    session:
+      timeout: 1h  # 1시간 동안 활동 없으면 세션 만료
