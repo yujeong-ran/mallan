@@ -1,5 +1,6 @@
 package com.mallan.yujeongran.icebreaking.balance_game.service;
 
+import com.mallan.yujeongran.icebreaking.admin.service.ManagementInfoService;
 import com.mallan.yujeongran.icebreaking.balance_game.dto.request.BalanceCreatePlayerRequestDto;
 import com.mallan.yujeongran.icebreaking.balance_game.dto.request.BalanceJoinRoomRequestDto;
 import com.mallan.yujeongran.icebreaking.balance_game.dto.request.BalanceUpdateQuestionCountRequestDto;
@@ -10,6 +11,7 @@ import com.mallan.yujeongran.icebreaking.balance_game.dto.response.BalanceRoomRe
 import com.mallan.yujeongran.icebreaking.balance_game.dto.response.BalanceWaitingRoomResponseDto;
 import com.mallan.yujeongran.icebreaking.balance_game.entity.BalanceRoom;
 import com.mallan.yujeongran.icebreaking.balance_game.repository.BalanceRoomRepository;
+import com.mallan.yujeongran.icebreaking.review.enums.GameType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,7 +31,7 @@ public class BalanceRoomService {
     private final BalanceRoomRepository balanceRoomRepository;
     private final BalancePlayerService balancePlayerService;
     private final RedisTemplate<String, String> redisTemplate;
-
+    private final ManagementInfoService managementInfoService;
 
     @Value("${BALANCE_ROOM_BASE_URL}")
     private String balanceRoomBaseUrl;
@@ -52,6 +54,8 @@ public class BalanceRoomService {
         balancePlayerService.createPlayer(hostId, requestDto.getNickname(), requestDto.getProfileImage());
         balancePlayerService.createRoom(roomCode, hostId);
 
+        managementInfoService.incrementUserCount(GameType.BALANCE_GAME);
+
         return BalanceRoomResponseDto.builder()
                 .playerId(hostId)
                 .roomCode(roomCode)
@@ -68,6 +72,8 @@ public class BalanceRoomService {
         BalanceRoom room = balanceRoomRepository.findByRoomCode(roomCode)
                 .orElseThrow(() -> new IllegalArgumentException("방이 존재하지 않습니다."));
         room.setPlayerCount(room.getPlayerCount() + 1);
+
+        managementInfoService.incrementUserCount(GameType.BALANCE_GAME);
 
         return BalanceJoinRoomResponseDto.builder()
                 .playerId(playerId)

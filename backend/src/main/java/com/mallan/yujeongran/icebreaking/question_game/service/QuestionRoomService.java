@@ -1,11 +1,13 @@
 package com.mallan.yujeongran.icebreaking.question_game.service;
 
+import com.mallan.yujeongran.icebreaking.admin.service.ManagementInfoService;
 import com.mallan.yujeongran.icebreaking.question_game.dto.request.*;
 import com.mallan.yujeongran.icebreaking.question_game.dto.response.*;
 import com.mallan.yujeongran.icebreaking.question_game.entity.QuestionRoom;
 import com.mallan.yujeongran.icebreaking.question_game.entity.QuestionTopic;
 import com.mallan.yujeongran.icebreaking.question_game.repository.QuestionRoomRepository;
 import com.mallan.yujeongran.icebreaking.question_game.repository.QuestionTopicRepository;
+import com.mallan.yujeongran.icebreaking.review.enums.GameType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +26,7 @@ public class QuestionRoomService {
     private final RedisTemplate<String, String> redisTemplate;
     private final QuestionRoomRepository questionRoomRepository;
     private final QuestionTopicRepository questionTopicRepository;
+    private final ManagementInfoService managementInfoService;
 
     @Value("${QUESTION_ROOM_BASE_URL}")
     private String baseUrl;
@@ -53,6 +56,8 @@ public class QuestionRoomService {
                 .build();
         questionRoomRepository.save(room);
 
+        managementInfoService.incrementUserCount(GameType.OPEN_QUESTION_GAME);
+
         return QuestionCreateRoomResponseDto.builder()
                 .roomCode(roomCode)
                 .hostId(playerId)
@@ -80,6 +85,8 @@ public class QuestionRoomService {
             room.setPlayerCount(room.getPlayerCount() + 1);
             questionRoomRepository.save(room);
         });
+
+        managementInfoService.incrementUserCount(GameType.OPEN_QUESTION_GAME);
 
         return QuestionJoinRoomResponseDto.builder()
                 .playerId(playerId)
@@ -161,6 +168,8 @@ public class QuestionRoomService {
         if (!request.getPlayerId().equals(hostId)) {
             throw new IllegalArgumentException("방장만 게임을 시작할 수 있습니다.");
         }
+
+        managementInfoService.incrementGameCount(GameType.OPEN_QUESTION_GAME);
 
         redisTemplate.opsForValue().set("question:room:" + roomCode + ":started", "true", Duration.ofHours(24));
     }

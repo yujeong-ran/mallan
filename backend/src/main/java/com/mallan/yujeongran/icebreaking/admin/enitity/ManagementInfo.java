@@ -48,6 +48,7 @@ public class ManagementInfo {
     private LocalDateTime updatedAt;
 
     @PrePersist
+    @PreUpdate
     protected void OnUpdate() {
         this.updatedAt = LocalDateTime.now();
     }

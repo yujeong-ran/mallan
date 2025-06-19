@@ -18,6 +18,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     int countReviewsByMonth(@Param("year") int year, @Param("month") int month);
 
     List<Review> findTop2ByOrderByCreatedAtDesc();
-
+    List<Review> findTop3ByOrderByCreatedAtDesc();
 
 }

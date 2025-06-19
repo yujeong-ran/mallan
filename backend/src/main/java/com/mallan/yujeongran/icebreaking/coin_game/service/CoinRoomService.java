@@ -1,5 +1,6 @@
 package com.mallan.yujeongran.icebreaking.coin_game.service;
 
+import com.mallan.yujeongran.icebreaking.admin.service.ManagementInfoService;
 import com.mallan.yujeongran.icebreaking.coin_game.dto.request.CoinExitRoomRequestDto;
 import com.mallan.yujeongran.icebreaking.coin_game.dto.request.CoinSetRoundRequestDto;
 import com.mallan.yujeongran.icebreaking.coin_game.dto.request.CoinStartGameRequestDto;
@@ -7,6 +8,7 @@ import com.mallan.yujeongran.icebreaking.coin_game.dto.response.CoinWaitingPlaye
 import com.mallan.yujeongran.icebreaking.coin_game.dto.response.CoinWaitingRoomResponseDto;
 import com.mallan.yujeongran.icebreaking.coin_game.entity.CoinRoom;
 import com.mallan.yujeongran.icebreaking.coin_game.repository.CoinRoomRepository;
+import com.mallan.yujeongran.icebreaking.review.enums.GameType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -23,6 +25,7 @@ public class CoinRoomService {
     private final CoinGameService coinGameService;
     private final CoinRoomRepository coinRoomRepository;
     private final RedisTemplate<String, String> redisTemplate;
+    private final ManagementInfoService managementInfoService;
 
     public CoinWaitingRoomResponseDto getWaitingRoomInfo(String roomCode) {
         CoinRoom room = coinRoomRepository.findByRoomCode(roomCode)
@@ -69,6 +72,8 @@ public class CoinRoomService {
         if (!request.getPlayerId().equals(hostId)) {
             throw new IllegalArgumentException("방장만 게임을 시작할 수 있습니다.");
         }
+
+        managementInfoService.incrementGameCount(GameType.COIN_TRUTH_GAME);
 
         redisTemplate.opsForValue().set("coin:room:" + roomCode + ":started", "true", Duration.ofHours(24));
     }

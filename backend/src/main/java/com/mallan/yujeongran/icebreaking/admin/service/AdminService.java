@@ -1,9 +1,12 @@
 package com.mallan.yujeongran.icebreaking.admin.service;
 
+import com.mallan.yujeongran.icebreaking.admin.dto.request.AdminLoginRequestDto;
 import com.mallan.yujeongran.icebreaking.admin.dto.request.CreateLoginIdRequestDto;
+import com.mallan.yujeongran.icebreaking.admin.dto.response.AdminLoginResponseDto;
 import com.mallan.yujeongran.icebreaking.admin.dto.response.CreateLoginIdResponseDto;
 import com.mallan.yujeongran.icebreaking.admin.enitity.Admin;
 import com.mallan.yujeongran.icebreaking.admin.repository.AdminRepository;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -49,6 +52,22 @@ public class AdminService {
         }
 
         adminRepository.delete(admin);
+    }
+
+    public AdminLoginResponseDto login(AdminLoginRequestDto request, HttpSession session){
+        Admin admin = adminRepository.findByLoginId(request.getLoginId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 아이디는 존재하지 않습니다."));
+
+        if(!passwordEncoder.matches(request.getPassword(), admin.getPassword())){
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        session.setAttribute("ADMIN_LOGIN_ID", request.getLoginId());
+
+        return AdminLoginResponseDto.builder()
+                .loginId(request.getLoginId())
+                .message("관리자 계정으로 로그인 하였습니다.")
+                .build();
     }
 
 }
