@@ -1,11 +1,13 @@
 package com.mallan.yujeongran.icebreaking.coin_game.service;
 
+import com.mallan.yujeongran.icebreaking.admin.service.ManagementInfoService;
 import com.mallan.yujeongran.icebreaking.coin_game.dto.request.CoinCreateRoomRequestDto;
 import com.mallan.yujeongran.icebreaking.coin_game.dto.request.CoinJoinRoomRequestDto;
 import com.mallan.yujeongran.icebreaking.coin_game.dto.response.CoinCreateRoomResponseDto;
 import com.mallan.yujeongran.icebreaking.coin_game.dto.response.CoinJoinRoomResponseDto;
 import com.mallan.yujeongran.icebreaking.coin_game.entity.CoinRoom;
 import com.mallan.yujeongran.icebreaking.coin_game.repository.CoinRoomRepository;
+import com.mallan.yujeongran.icebreaking.review.enums.GameType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +25,7 @@ public class CoinPlayerService {
 
     private final RedisTemplate<String, String> redisTemplate;
     private final CoinRoomRepository coinRoomRepository;
+    private final ManagementInfoService managementInfoService;
 
     @Value("${COIN_ROOM_BASE_URL}")
     private String coinRoomBaseUrl;
@@ -52,6 +55,8 @@ public class CoinPlayerService {
 
         coinRoomRepository.save(room);
 
+        managementInfoService.incrementUserCount(GameType.COIN_TRUTH_GAME);
+
         return CoinCreateRoomResponseDto.builder()
                 .roomCode(roomCode)
                 .hostId(playerId)
@@ -80,6 +85,8 @@ public class CoinPlayerService {
             room.setPlayerCount(current + 1);
             coinRoomRepository.save(room);
         });
+
+        managementInfoService.incrementUserCount(GameType.COIN_TRUTH_GAME);
 
         return CoinJoinRoomResponseDto.builder()
                 .playerId(playerId)

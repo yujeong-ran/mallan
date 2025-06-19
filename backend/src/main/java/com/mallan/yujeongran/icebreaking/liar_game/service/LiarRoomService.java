@@ -1,5 +1,6 @@
 package com.mallan.yujeongran.icebreaking.liar_game.service;
 
+import com.mallan.yujeongran.icebreaking.admin.service.ManagementInfoService;
 import com.mallan.yujeongran.icebreaking.liar_game.dto.request.*;
 import com.mallan.yujeongran.icebreaking.liar_game.dto.response.LiarGameResultResponseDto;
 import com.mallan.yujeongran.icebreaking.liar_game.dto.response.LiarPlayerInfoResponseDto;
@@ -8,6 +9,7 @@ import com.mallan.yujeongran.icebreaking.liar_game.entity.LiarRoom;
 import com.mallan.yujeongran.icebreaking.liar_game.entity.LiarWord;
 import com.mallan.yujeongran.icebreaking.liar_game.repository.LiarRoomRepository;
 import com.mallan.yujeongran.icebreaking.liar_game.repository.LiarWordRepository;
+import com.mallan.yujeongran.icebreaking.review.enums.GameType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +26,7 @@ public class LiarRoomService {
     private final LiarRoomRepository liarRoomRepository;
     private final LiarWordRepository liarWordRepository;
     private final LiarPlayerService liarPlayerService;
+    private final ManagementInfoService managementInfoService;
 
     @Value("${LIAR_ROOM_BASE_URL}")
     private String liarRoomBaseUrl;
@@ -48,6 +51,9 @@ public class LiarRoomService {
         response.put("playerId", playerId);
         response.put("roomCode", roomCode);
         response.put("url", liarRoomBaseUrl + "/" + roomCode);
+
+        managementInfoService.incrementUserCount(GameType.LIAR_GAME);
+
         return response;
     }
 
@@ -86,6 +92,9 @@ public class LiarRoomService {
         Map<String, String> response = new HashMap<>();
         response.put("playerId", playerId);
         response.put("roomCode", roomCode);
+
+        managementInfoService.incrementUserCount(GameType.LIAR_GAME);
+
         return response;
     }
 
@@ -212,6 +221,8 @@ public class LiarRoomService {
 
         Collections.shuffle(allPlayerIds);
         List<String> liarIds = allPlayerIds.subList(0, liarCount);
+
+        managementInfoService.incrementGameCount(GameType.LIAR_GAME);
 
         liarPlayerService.assignLiars(roomCode, liarIds);
     }

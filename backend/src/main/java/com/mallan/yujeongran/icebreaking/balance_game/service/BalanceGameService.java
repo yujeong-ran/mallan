@@ -1,5 +1,6 @@
 package com.mallan.yujeongran.icebreaking.balance_game.service;
 
+import com.mallan.yujeongran.icebreaking.admin.service.ManagementInfoService;
 import com.mallan.yujeongran.icebreaking.balance_game.dto.request.BalanceCreateIngameQuestionRequestDto;
 import com.mallan.yujeongran.icebreaking.balance_game.dto.request.BalanceStartGameRequestDto;
 import com.mallan.yujeongran.icebreaking.balance_game.dto.request.BalanceSubmitAnswerRequestDto;
@@ -13,6 +14,7 @@ import com.mallan.yujeongran.icebreaking.balance_game.repository.BalanceFinalRes
 import com.mallan.yujeongran.icebreaking.balance_game.repository.BalanceQuestionRepository;
 import com.mallan.yujeongran.icebreaking.balance_game.repository.BalanceResultRepository;
 import com.mallan.yujeongran.icebreaking.balance_game.repository.BalanceRoomRepository;
+import com.mallan.yujeongran.icebreaking.review.enums.GameType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -35,6 +37,7 @@ public class BalanceGameService {
     private final BalancePlayerService balancePlayerService;
     private final RedisTemplate<String, String> redisTemplate;
     private final StringRedisTemplate stringRedisTemplate;
+    private final ManagementInfoService managementInfoService;
 
     public void startGame(String roomCode, BalanceStartGameRequestDto requestDto) {
         BalanceRoom room = balanceRoomRepository.findByRoomCode(roomCode)
@@ -56,6 +59,8 @@ public class BalanceGameService {
         for (BalanceQuestion q : selectedQuestions) {
             stringRedisTemplate.opsForList().rightPush(redisKey, q.getId().toString());
         }
+
+        managementInfoService.incrementGameCount(GameType.BALANCE_GAME);
 
         stringRedisTemplate.opsForValue().set("room:" + roomCode + ":currentQuestionIdx", "0");
 
