@@ -1,6 +1,8 @@
 package com.mallan.yujeongran.icebreaking.review.controller;
 
 import com.mallan.yujeongran.common.model.CommonResponse;
+import com.mallan.yujeongran.icebreaking.admin.service.ManagementInfoService;
+import com.mallan.yujeongran.icebreaking.review.dto.request.ReviewDeleteRequestDto;
 import com.mallan.yujeongran.icebreaking.review.dto.request.ReviewRequestDto;
 import com.mallan.yujeongran.icebreaking.review.dto.response.ReviewResponseDto;
 import com.mallan.yujeongran.icebreaking.review.dto.response.ReviewStatsResponseDto;
@@ -20,6 +22,7 @@ import java.util.List;
 public class ReviewController {
 
     private final ReviewService reviewService;
+    private final ManagementInfoService managementInfoService;
 
     @PostMapping
     @Operation(
@@ -39,13 +42,23 @@ public class ReviewController {
             @RequestBody ReviewRequestDto request
     ) {
         ReviewResponseDto reviewResponseDto = reviewService.createReview(request);
+
+        ReviewStatsResponseDto stats = reviewService.getReviewStats();
+        managementInfoService.updateStatsFromReview(stats);
+
         return ResponseEntity.ok(CommonResponse.success("리뷰 작성 성공!", reviewResponseDto));
     }
 
-    @GetMapping("/recent")
-    @Operation(summary = "최근 2건의 리류 조회 API", description = "최근 리뷰 2건을 조회합니다.")
-    public ResponseEntity<CommonResponse<List<ReviewResponseDto>>> getRecentReviews() {
-        return ResponseEntity.ok(CommonResponse.success("최근 리뷰 2건 조회", reviewService.getRecentReviews()));
+    @GetMapping("/recent/two")
+    @Operation(summary = "최근 2건의 리뷰 조회 API", description = "최근 리뷰 2건을 조회합니다.")
+    public ResponseEntity<CommonResponse<List<ReviewResponseDto>>> getRecentTwoReviews() {
+        return ResponseEntity.ok(CommonResponse.success("최근 리뷰 2건 조회", reviewService.getRecentTwoReviews()));
+    }
+
+    @GetMapping("/recent/three")
+    @Operation(summary = "최근 3건의 리뷰 조회 API", description = "최근 리뷰 3건을 조회합니다.")
+    public ResponseEntity<CommonResponse<List<ReviewResponseDto>>> getRecentThreeReviews() {
+        return ResponseEntity.ok(CommonResponse.success("최근 리뷰 2건 조회", reviewService.getRecentThreeReviews()));
     }
 
     @GetMapping("/stats")
@@ -53,5 +66,21 @@ public class ReviewController {
     public ResponseEntity<CommonResponse<ReviewStatsResponseDto>> getReviewStats() {
         return ResponseEntity.ok(CommonResponse.success("리뷰 통계 조회 성공", reviewService.getReviewStats()));
     }
+
+    @GetMapping("/all")
+    @Operation(summary = "전체 리뷰 조회 API (관리자 전용)", description = "모든 리뷰를 조회합니다.")
+    public ResponseEntity<CommonResponse<List<ReviewResponseDto>>> getAllReviews() {
+        return ResponseEntity.ok(CommonResponse.success("전체 리뷰 조회 성공", reviewService.getAllReviews()));
+    }
+
+    @DeleteMapping("/delete")
+    @Operation(summary = "리뷰 삭제 API (관리자 전용)", description = "특정 리뷰를 삭제합니다.")
+    public ResponseEntity<CommonResponse<Void>> deleteReview(
+            @RequestBody ReviewDeleteRequestDto request
+            ) {
+        reviewService.deleteReview(request);
+        return ResponseEntity.ok(CommonResponse.success("리뷰 삭제 성공", null));
+    }
+
 
 }
