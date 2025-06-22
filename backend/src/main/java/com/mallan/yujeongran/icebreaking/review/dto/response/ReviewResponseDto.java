@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class ReviewResponseDto {
 
     private GameType gameType;
+    private String gameTypeKorean;
     private String nickname;
     private int grade;
     private String content;
@@ -20,6 +21,7 @@ public class ReviewResponseDto {
     public static ReviewResponseDto from(Review review) {
         return ReviewResponseDto.builder()
                 .gameType(review.getGameType())
+                .gameTypeKorean(review.getGameType().getKorean())
                 .nickname(review.getNickname())
                 .grade(review.getGrade())
                 .content(review.getContent())

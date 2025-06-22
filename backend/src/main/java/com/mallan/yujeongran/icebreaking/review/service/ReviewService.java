@@ -43,24 +43,14 @@ public class ReviewService {
     public List<ReviewResponseDto> getRecentTwoReviews() {
         return reviewRepository.findTop2ByOrderByCreatedAtDesc()
                 .stream()
-                .map(r -> ReviewResponseDto.builder()
-                        .gameType(r.getGameType())
-                        .nickname(r.getNickname())
-                        .grade(r.getGrade())
-                        .content(r.getContent())
-                        .build())
+                .map(ReviewResponseDto::from)
                 .toList();
     }
 
     public List<ReviewResponseDto> getRecentThreeReviews() {
         return reviewRepository.findTop3ByOrderByCreatedAtDesc()
                 .stream()
-                .map(r -> ReviewResponseDto.builder()
-                        .gameType(r.getGameType())
-                        .nickname(r.getNickname())
-                        .grade(r.getGrade())
-                        .content(r.getContent())
-                        .build())
+                .map(ReviewResponseDto::from)
                 .toList();
     }
 
@@ -79,7 +69,7 @@ public class ReviewService {
 
     public List<ReviewResponseDto> getAllReviews() {
         return reviewRepository.findAll().stream()
-                .map(r -> ReviewResponseDto.from(r))
+                .map(ReviewResponseDto::from)
                 .toList();
     }
 
