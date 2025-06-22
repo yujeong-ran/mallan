@@ -28,7 +28,10 @@ function App() {
             <Route path="/liar/room" element={<LiarMainPage />} />
             <Route path="/liar/room/:roomCode" element={<LiarMainPage />} />
             <Route path="/liar/lobby/:roomCode" element={<LiarRoomPage />} />
-            <Route path="/liar/explanation" element={<LiarExplanationPage />} />
+            <Route
+              path="/liar/explanation/:roomCode"
+              element={<LiarExplanationPage />}
+            />
             <Route path="/liar/vote" element={<LiarVote />} />
             <Route path="/liar/wordEnter" element={<LiarWordEnter />} />
             <Route path="/liar/victory/:winner" element={<LiarVictory />} />

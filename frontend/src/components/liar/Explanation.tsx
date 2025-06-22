@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 import media from '../../styles/breakPoint';
 import Timer from './Timer';
+import { getWordApi } from '../../api/getWordApi';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 const ExplanationCon = styled.div`
   padding: 40px;
@@ -49,15 +52,33 @@ const Button = styled.button`
 `;
 
 function Explanation() {
+  const { roomCode } = useParams();
+  const [word, setWord] = useState('');
+  const playerNickname = localStorage.getItem('playerNickname');
+  const playerId = localStorage.getItem('playerId');
+
+  useEffect(() => {
+    const fetchWord = async () => {
+      try {
+        const wordData = await getWordApi(roomCode ?? '', playerId ?? '');
+
+        setWord(wordData.data.word);
+      } catch (error) {
+        console.log('요청 실패', error);
+      }
+    };
+    fetchWord();
+  }, []);
+
   return (
     <ExplanationCon>
       <Speaker>
         <p>현재 발언자</p>
-        <strong>귀여운 오리</strong>
+        <strong>{playerNickname}</strong>
       </Speaker>
       <Timer />
       <WordGuide>
-        <span>호랑이</span>에 대해 설명하세요!
+        <span>{word}</span>에 대해 설명하세요!
       </WordGuide>
       <Button>다음 사람에게 넘기기</Button>
     </ExplanationCon>
