@@ -28,7 +28,7 @@ public class QuestionGameService {
     private final QuestionQuestionRepository questionquestionRepository;
     private final QuestionRoomRepository questionRoomRepository;
 
-    public void startGame(String roomCode, int topicId, int questionCount) {
+    public void startGame(String roomCode, Long topicId, int questionCount) {
         QuestionTopic topic = questiontopicRepository.findById((long) topicId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 주제를 찾을 수 없습니다."));
 
@@ -96,7 +96,7 @@ public class QuestionGameService {
         return remaining == null || remaining == 0;
     }
 
-    public void restartGame(String roomCode, QuestionRestartGameRequestDto request, int topicId, int questionCount) {
+    public void restartGame(String roomCode, QuestionRestartGameRequestDto request, Long topicId, int questionCount) {
         String hostId = (String) redisTemplate.opsForHash().get("question:room:" + roomCode, "hostId");
 
         if (!request.getPlayerId().equals(hostId)) {

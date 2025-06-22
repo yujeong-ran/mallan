@@ -1,5 +1,7 @@
 package com.mallan.yujeongran.icebreaking.liar_game.service;
 
+import com.mallan.yujeongran.icebreaking.liar_game.dto.request.LiarDeleteWordRequestDto;
+import com.mallan.yujeongran.icebreaking.liar_game.dto.response.LiarDeleteWordResponseDto;
 import com.mallan.yujeongran.icebreaking.liar_game.dto.response.LiarWordResponseDto;
 import com.mallan.yujeongran.icebreaking.liar_game.dto.request.LiarCreateWordRequestDto;
 import com.mallan.yujeongran.icebreaking.liar_game.entity.LiarTopic;
@@ -39,4 +41,17 @@ public class LiarWordService {
                 .map(LiarWordResponseDto::fromEntity)
                 .collect(Collectors.toList());
     }
+
+    public LiarDeleteWordResponseDto deleteWord(LiarDeleteWordRequestDto request){
+        LiarWord word = liarWordRepository.findById(request.getWordId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 질문이 없습니다."));
+
+        liarWordRepository.delete(word);
+
+        return LiarDeleteWordResponseDto.builder()
+                .wordId(word.getId())
+                .word(word.getWord())
+                .build();
+    }
+
 }

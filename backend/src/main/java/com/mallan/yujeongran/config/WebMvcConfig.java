@@ -20,7 +20,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns(
                         "/admin/**",
                         "/management/**",
-                        "/reviews/**"
+                        "/reviews/delete"
                 )
                 .excludePathPatterns(
                         "/admin/login",
@@ -31,6 +31,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //                        "/reviews/delete",
 //                        "/reviews/all/**",
 //                        "/reviews/delete/**",
+                        "/reviews/**",
                         "/swagger-ui/**",
                         "/v3/api-docs/**"
                 );
