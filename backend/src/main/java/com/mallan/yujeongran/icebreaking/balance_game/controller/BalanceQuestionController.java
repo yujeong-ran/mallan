@@ -2,7 +2,9 @@ package com.mallan.yujeongran.icebreaking.balance_game.controller;
 
 import com.mallan.yujeongran.common.model.CommonResponse;
 import com.mallan.yujeongran.icebreaking.balance_game.dto.request.BalanceCreateQuestionRequestDto;
+import com.mallan.yujeongran.icebreaking.balance_game.dto.request.BalanceDeleteQuestionRequestDto;
 import com.mallan.yujeongran.icebreaking.balance_game.dto.response.BalanceCreateQuestionResponseDto;
+import com.mallan.yujeongran.icebreaking.balance_game.dto.response.BalanceDeleteQuestionResponseDto;
 import com.mallan.yujeongran.icebreaking.balance_game.service.BalanceQuestionService;
 import com.mallan.yujeongran.icebreaking.balance_game.service.BalanceTopicService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,6 +41,15 @@ public class BalanceQuestionController {
     ) {
         List<BalanceCreateQuestionResponseDto> response = balanceQuestionService.getQuestionsByTopicId(topicId);
         return ResponseEntity.ok(CommonResponse.success("질문 목록 조회 성공!", response));
+    }
+
+    @DeleteMapping
+    @Operation(summary = "질문 삭제 API", description = "밸런스 게임의 질문을 삭제합니다.")
+    public ResponseEntity<CommonResponse<BalanceDeleteQuestionResponseDto>> deleteQuestion(
+            @RequestBody BalanceDeleteQuestionRequestDto request
+    ){
+        BalanceDeleteQuestionResponseDto response = balanceQuestionService.deleteQuestion(request);
+        return ResponseEntity.ok(CommonResponse.success("질문 삭제 성공", response));
     }
 
 }

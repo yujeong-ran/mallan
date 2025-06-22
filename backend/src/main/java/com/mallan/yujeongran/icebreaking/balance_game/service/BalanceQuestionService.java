@@ -1,7 +1,9 @@
 package com.mallan.yujeongran.icebreaking.balance_game.service;
 
 import com.mallan.yujeongran.icebreaking.balance_game.dto.request.BalanceCreateQuestionRequestDto;
+import com.mallan.yujeongran.icebreaking.balance_game.dto.request.BalanceDeleteQuestionRequestDto;
 import com.mallan.yujeongran.icebreaking.balance_game.dto.response.BalanceCreateQuestionResponseDto;
+import com.mallan.yujeongran.icebreaking.balance_game.dto.response.BalanceDeleteQuestionResponseDto;
 import com.mallan.yujeongran.icebreaking.balance_game.entity.BalanceQuestion;
 import com.mallan.yujeongran.icebreaking.balance_game.entity.BalanceTopic;
 import com.mallan.yujeongran.icebreaking.balance_game.repository.BalanceQuestionRepository;
@@ -54,6 +56,19 @@ public class BalanceQuestionService {
                         .choiceB(q.getChoiceB())
                         .build())
                 .toList();
+    }
+
+    public BalanceDeleteQuestionResponseDto deleteQuestion(BalanceDeleteQuestionRequestDto request){
+        BalanceQuestion question = balanceQuestionRepository.findById((request.getQuestionId()))
+                .orElseThrow(() -> new IllegalArgumentException("해당 질문이 없습니다."));
+
+        balanceQuestionRepository.delete(question);
+
+        return BalanceDeleteQuestionResponseDto.builder()
+                .questionId(question.getId())
+                .question(question.getContent())
+                .build();
+
     }
 
 }
