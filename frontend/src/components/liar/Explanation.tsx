@@ -54,7 +54,7 @@ const Button = styled.button`
 function Explanation() {
   const { roomCode } = useParams();
   const [word, setWord] = useState('');
-  const playerNickname = localStorage.getItem('PlayerNickname');
+  const playerNickname = localStorage.getItem('playerNickname');
   const playerId = localStorage.getItem('playerId');
 
   useEffect(() => {
