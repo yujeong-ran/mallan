@@ -59,6 +59,7 @@ function CharacterSet({ isGuest }: { isGuest: boolean }) {
 
         if (playerId) {
           localStorage.setItem('playerId', playerId);
+          localStorage.setItem('PlayerNickname', nickname);
         }
         navigate(`/liar/lobby/${roomCode}`);
       } else {
@@ -67,6 +68,7 @@ function CharacterSet({ isGuest }: { isGuest: boolean }) {
 
         if (playerId) {
           localStorage.setItem('playerId', playerId);
+          localStorage.setItem('PlayerNickname', nickname);
         }
         navigate(`/liar/lobby/${playData.data.roomCode}`);
       }
