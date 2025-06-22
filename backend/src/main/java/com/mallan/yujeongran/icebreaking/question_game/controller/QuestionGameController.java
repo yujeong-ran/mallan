@@ -28,7 +28,7 @@ public class QuestionGameController {
     @Operation(summary = "게임 시작 API", description = "주제 ID와 문제 수에 따라 게임을 시작합니다.")
     public ResponseEntity<CommonResponse<Void>> startGame(
             @PathVariable String roomCode,
-            @RequestParam int topicId,
+            @RequestParam Long topicId,
             @RequestParam int questionCount
     ) {
         questionGameService.startGame(roomCode, topicId, questionCount);
@@ -87,7 +87,7 @@ public class QuestionGameController {
     @Operation(summary = "게임 재시작 API", description = "기존 게임 데이터를 초기화하고 새 게임을 시작합니다.")
     public ResponseEntity<CommonResponse<Void>> restartGame(
             @PathVariable String roomCode,
-            @RequestParam int topicId,
+            @RequestParam Long topicId,
             @RequestParam int questionCount,
             @RequestBody QuestionRestartGameRequestDto request
     ) {
