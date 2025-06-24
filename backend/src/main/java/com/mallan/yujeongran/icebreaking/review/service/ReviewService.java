@@ -1,6 +1,7 @@
 package com.mallan.yujeongran.icebreaking.review.service;
 
 import com.mallan.yujeongran.icebreaking.review.dto.request.ReviewDeleteRequestDto;
+import com.mallan.yujeongran.icebreaking.review.dto.request.ReviewFilterRequestDto;
 import com.mallan.yujeongran.icebreaking.review.dto.request.ReviewRequestDto;
 import com.mallan.yujeongran.icebreaking.review.dto.response.ReviewResponseDto;
 import com.mallan.yujeongran.icebreaking.review.dto.response.ReviewStatsResponseDto;
@@ -78,6 +79,19 @@ public class ReviewService {
             throw new IllegalArgumentException("해당 리뷰를 찾을 수 없습니다.");
         }
         reviewRepository.deleteById(request.getReviewId());
+    }
+
+    public List<ReviewResponseDto> filterReviews(ReviewFilterRequestDto request) {
+        List<Review> reviews = reviewRepository.filterReviews(
+                request.getGameTypes() == null || request.getGameTypes().isEmpty() ? null : request.getGameTypes(),
+                request.getMinGrade(),
+                request.getMaxGrade(),
+                request.getKeyword() == null || request.getKeyword().isEmpty() ? null : request.getKeyword()
+        );
+
+        return reviews.stream()
+                .map(ReviewResponseDto ::from)
+                .toList();
     }
 
 }
