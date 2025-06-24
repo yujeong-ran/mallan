@@ -3,6 +3,7 @@ package com.mallan.yujeongran.icebreaking.review.controller;
 import com.mallan.yujeongran.common.model.CommonResponse;
 import com.mallan.yujeongran.icebreaking.admin.service.ManagementInfoService;
 import com.mallan.yujeongran.icebreaking.review.dto.request.ReviewDeleteRequestDto;
+import com.mallan.yujeongran.icebreaking.review.dto.request.ReviewFilterRequestDto;
 import com.mallan.yujeongran.icebreaking.review.dto.request.ReviewRequestDto;
 import com.mallan.yujeongran.icebreaking.review.dto.response.ReviewResponseDto;
 import com.mallan.yujeongran.icebreaking.review.dto.response.ReviewStatsResponseDto;
@@ -82,5 +83,13 @@ public class ReviewController {
         return ResponseEntity.ok(CommonResponse.success("리뷰 삭제 성공", null));
     }
 
+    @PostMapping("/filter")
+    @Operation(summary = "리뷰 필터링 API", description = "게임 종류, 평점, 키워드로 리뷰를 필터링 합니다.")
+    public ResponseEntity<CommonResponse<List<ReviewResponseDto>>> filterReview (
+            @RequestBody ReviewFilterRequestDto request
+    ){
+        List<ReviewResponseDto> response = reviewService.filterReviews(request);
+        return ResponseEntity.ok(CommonResponse.success("필터링 성공!", response));
+    }
 
 }
