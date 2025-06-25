@@ -1,6 +1,7 @@
 package com.mallan.yujeongran.icebreaking.review.controller;
 
 import com.mallan.yujeongran.common.model.CommonResponse;
+import com.mallan.yujeongran.common.model.PagedResponse;
 import com.mallan.yujeongran.icebreaking.admin.service.ManagementInfoService;
 import com.mallan.yujeongran.icebreaking.review.dto.request.ReviewDeleteRequestDto;
 import com.mallan.yujeongran.icebreaking.review.dto.request.ReviewFilterRequestDto;
@@ -11,6 +12,7 @@ import com.mallan.yujeongran.icebreaking.review.service.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -84,12 +86,14 @@ public class ReviewController {
     }
 
     @PostMapping("/filter")
-    @Operation(summary = "리뷰 필터링 API", description = "게임 종류, 평점, 키워드로 리뷰를 필터링 합니다.")
-    public ResponseEntity<CommonResponse<List<ReviewResponseDto>>> filterReview (
-            @RequestBody ReviewFilterRequestDto request
+    @Operation(summary = "리뷰 필터링 API", description = "게임 종류, 평점, 키워드로 페이징 된 리뷰를 필터링 합니다.")
+    public ResponseEntity<CommonResponse<PagedResponse<ReviewResponseDto>>> filterReview (
+            @RequestBody ReviewFilterRequestDto request,
+            @RequestParam(defaultValue = "0") int page
     ){
-        List<ReviewResponseDto> response = reviewService.filterReviews(request);
-        return ResponseEntity.ok(CommonResponse.success("필터링 성공!", response));
+        Page<ReviewResponseDto> numberOfPage = reviewService.filterReviews(request, page);
+        PagedResponse<ReviewResponseDto> response = new PagedResponse<>(numberOfPage);
+        return ResponseEntity.ok(CommonResponse.success("조회 성공!", response));
     }
 
 }

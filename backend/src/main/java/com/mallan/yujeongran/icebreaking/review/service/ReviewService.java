@@ -9,6 +9,9 @@ import com.mallan.yujeongran.icebreaking.review.enitity.Review;
 import com.mallan.yujeongran.icebreaking.review.repository.ReviewRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,6 +26,11 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
 
     public ReviewResponseDto createReview(ReviewRequestDto request) {
+
+        if(request.getGrade() < 1 || 5 < request.getGrade()) {
+            throw new IllegalArgumentException("평점은 1에서 5사이의 정수여야 합니다.");
+        }
+
         Review review = Review.builder()
                 .gameType(request.getGameType())
                 .nickname(request.getNickname())
@@ -81,17 +89,24 @@ public class ReviewService {
         reviewRepository.deleteById(request.getReviewId());
     }
 
-    public List<ReviewResponseDto> filterReviews(ReviewFilterRequestDto request) {
-        List<Review> reviews = reviewRepository.filterReviews(
-                request.getGameTypes() == null || request.getGameTypes().isEmpty() ? null : request.getGameTypes(),
+    public Page<ReviewResponseDto> filterReviews(ReviewFilterRequestDto request, int page) {
+        int size = 6;
+        Pageable pageable = PageRequest.of(page, size);
+
+        List<String> gameTypeStrings = request.getGameTypes() == null ? null :
+                request.getGameTypes().stream()
+                        .map(Enum::name)
+                        .toList();
+
+        Page<Review> reviews = reviewRepository.filterReviews(
+                gameTypeStrings,
                 request.getMinGrade(),
                 request.getMaxGrade(),
-                request.getKeyword() == null || request.getKeyword().isEmpty() ? null : request.getKeyword()
+                request.getKeyword() == null || request.getKeyword().isEmpty() ? null : request.getKeyword(),
+                pageable
         );
 
-        return reviews.stream()
-                .map(ReviewResponseDto ::from)
-                .toList();
+        return reviews.map(ReviewResponseDto ::from);
     }
 
 }

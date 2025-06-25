@@ -1,7 +1,8 @@
 package com.mallan.yujeongran.icebreaking.review.repository;
 
 import com.mallan.yujeongran.icebreaking.review.enitity.Review;
-import com.mallan.yujeongran.icebreaking.review.enums.GameType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,20 +20,32 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     int countReviewsByMonth(@Param("year") int year, @Param("month") int month);
 
     List<Review> findTop2ByOrderByCreatedAtDesc();
+
     List<Review> findTop3ByOrderByCreatedAtDesc();
 
-    @Query("""
-        SELECT r FROM Review r
-        WHERE (:gameTypes IS NULL OR r.gameType In :gameTypes)
-        AND (:minGrade IS NULL OR r.grade >= :minGrade)
-        AND (:maxGrade IS NULL OR r.grade <= :maxGrade)
-        AND (:keyword IS NULL OR r.content LIKE CONCAT('%', :keyword, '%'))
-    """)
-    List<Review> filterReviews(
-      @Param("gameTypes") List<GameType> gameTypes,
-      @Param("minGrade") Integer minGrade,
-      @Param("maxGrade") Integer maxGrade,
-      @Param("keyword") String keyword
+    @Query(
+            value = """
+                    SELECT * FROM review
+                    WHERE (:gameTypes IS NULL OR game_type IN (:gameTypes))
+                    AND (:minGrade IS NULL OR grade >= :minGrade)
+                    AND (:maxGrade IS NULL OR grade <= :maxGrade)
+                    AND (:keyword IS NULL OR content LIKE CONCAT('%', :keyword, '%'))
+                    """,
+            countQuery = """
+                    SELECT COUNT(*) FROM review
+                    WHERE (:gameTypes IS NULL OR game_type IN (:gameTypes))
+                    AND (:minGrade IS NULL OR grade >= :minGrade)
+                    AND (:maxGrade IS NULL OR grade <= :maxGrade)
+                    AND (:keyword IS NULL OR content LIKE CONCAT('%', :keyword, '%'))
+                    """,
+            nativeQuery = true
+    )
+    Page<Review> filterReviews(
+            @Param("gameTypes") List<String> gameTypes,
+            @Param("minGrade") Integer minGrade,
+            @Param("maxGrade") Integer maxGrade,
+            @Param("keyword") String keyword,
+            Pageable pageable
     );
 
 }
